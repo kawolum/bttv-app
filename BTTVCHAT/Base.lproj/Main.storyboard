@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BTTVCHAT" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="eMe-cl-3MU">
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="26H-DK-Jo2">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hzx-d3-3AL">
+                                        <subviews>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dns-Bc-oUq">
+                                                <frame key="frameInset" width="302" height="40"/>
+                                                <nil key="textColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="twitter"/>
+                                                <connections>
+                                                    <action selector="textFieldDidChange:" destination="BYZ-38-t0r" eventType="editingChanged" id="H7R-uk-akc"/>
+                                                </connections>
+                                            </textField>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIK-N3-n70">
+                                                <frame key="frameInset" minX="307" width="36" height="40"/>
+                                                <state key="normal" title="Send"/>
+                                                <connections>
+                                                    <action selector="sendButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cxi-O4-8Zr"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="POg-XT-lxL"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="26H-DK-Jo2" secondAttribute="trailing" id="4tw-u2-ryy"/>
+                                    <constraint firstItem="26H-DK-Jo2" firstAttribute="top" secondItem="eMe-cl-3MU" secondAttribute="top" id="9bS-jn-4ts"/>
+                                    <constraint firstAttribute="bottom" secondItem="hzx-d3-3AL" secondAttribute="bottom" id="DzS-zM-0XW"/>
+                                    <constraint firstItem="hzx-d3-3AL" firstAttribute="top" secondItem="26H-DK-Jo2" secondAttribute="bottom" id="N2c-7K-hkO"/>
+                                    <constraint firstItem="hzx-d3-3AL" firstAttribute="leading" secondItem="eMe-cl-3MU" secondAttribute="leading" id="u0s-X0-boC"/>
+                                    <constraint firstItem="26H-DK-Jo2" firstAttribute="leading" secondItem="eMe-cl-3MU" secondAttribute="leading" id="xSr-m9-mK2"/>
+                                    <constraint firstAttribute="trailing" secondItem="hzx-d3-3AL" secondAttribute="trailing" id="zWP-Yi-mJt"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="eMe-cl-3MU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="07y-Ve-130"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="eMe-cl-3MU" secondAttribute="bottom" id="1dY-Ds-N9z"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="eMe-cl-3MU" secondAttribute="trailing" id="LJ0-Vg-1JQ"/>
+                            <constraint firstItem="eMe-cl-3MU" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="pU6-A5-nKL"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bottomConstraint" destination="1dY-Ds-N9z" id="Tyr-BZ-eY8"/>
+                        <outlet property="chatTextView" destination="26H-DK-Jo2" id="caS-qz-UB6"/>
+                        <outlet property="mainStackView" destination="eMe-cl-3MU" id="GcA-Cj-cCX"/>
+                        <outlet property="messageTextField" destination="Dns-Bc-oUq" id="q2o-mY-WcE"/>
+                        <outlet property="sendButton" destination="UIK-N3-n70" id="Yld-7i-N0u"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-356" y="83.208395802098963"/>
+        </scene>
+    </scenes>
+</document>
