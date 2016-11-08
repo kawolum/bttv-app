@@ -12,6 +12,7 @@
 		EC10198C1DCC283F00215E78 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC10198A1DCC283F00215E78 /* Main.storyboard */; };
 		EC10198E1DCC283F00215E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EC10198D1DCC283F00215E78 /* Assets.xcassets */; };
 		EC1019911DCC283F00215E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC10198F1DCC283F00215E78 /* LaunchScreen.storyboard */; };
+		EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */; };
 		EC3E49B41DD04417003509DD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3E49B31DD04417003509DD /* Message.swift */; };
 		ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943621DCE8C1B0002E560 /* ysocket.swift */; };
 		ECB943681DCE8C1B0002E560 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = ECB943631DCE8C1B0002E560 /* ytcpsocket.c */; };
@@ -30,6 +31,7 @@
 		EC10198D1DCC283F00215E78 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EC1019901DCC283F00215E78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EC1019921DCC283F00215E78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		EC3E49B31DD04417003509DD /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		ECB943621DCE8C1B0002E560 /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
 		ECB943631DCE8C1B0002E560 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ytcpsocket.c; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				EC1019861DCC283F00215E78 /* AppDelegate.swift */,
 				EC1019881DCC283F00215E78 /* ViewController.swift */,
 				EC3E49B31DD04417003509DD /* Message.swift */,
+				EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */,
 				EC10198A1DCC283F00215E78 /* Main.storyboard */,
 				EC10198D1DCC283F00215E78 /* Assets.xcassets */,
 				EC10198F1DCC283F00215E78 /* LaunchScreen.storyboard */,
@@ -232,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */,
+				EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */,
 				EC1019891DCC283F00215E78 /* ViewController.swift in Sources */,
 				ECB943681DCE8C1B0002E560 /* ytcpsocket.c in Sources */,
 				EC3E49B41DD04417003509DD /* Message.swift in Sources */,

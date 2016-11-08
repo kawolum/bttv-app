@@ -52,11 +52,4 @@ class Message: NSObject {
         
     }
 }
-extension String {
-    public func indexOfCharacter(char: Character) -> Int? {
-        if let idx = characters.index(of: char) {
-            return characters.distance(from: startIndex, to: idx)
-        }
-        return nil
-    }
-}
+

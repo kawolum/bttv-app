@@ -15,19 +15,26 @@ class ViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var chatTextView: UITextView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
+    var maxMessageCount = 50
+    var currentMessageCount = 0
+    
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
     var pass: String? = "oauth:3jzkmsisl13cls2529jezdrl20xqdk"
     var nick: String? = "kawolum822"
-    var channel: String? = "lol_peanut"
+    var channel: String? = "c9sneaky"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.automaticallyAdjustsScrollViewInsets = false
         configureTextField()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         configureChat()
+        //chatTextView.textContainer.lineBreakMode = NSLineBreakMode.byTruncatingHead
+        //textView.textContainer.maximumNumberOfLines = 10;
+        //textView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
     }
     
     func configureChat(){
@@ -148,9 +155,36 @@ class ViewController: UIViewController, UITextFieldDelegate{
     
     func appendMessagetoView(message:Message){
         DispatchQueue.main.async{
-            self.chatTextView.text.append(message.displayName + ": " + message.message + "\r\n")
-            let range = NSMakeRange((self.chatTextView.text?.characters.count)! - 1, 0)
+            if self.currentMessageCount != 0{
+                self.chatTextView.text.append("\r\n" + message.displayName + ": " + message.message)
+            }else{
+                
+                self.chatTextView.text.append(message.displayName + ": " + message.message)
+            }
+            let range = NSMakeRange((self.chatTextView.text?.characters.count)! - 1, 1)
             self.chatTextView.scrollRangeToVisible(range)
+            
+            DispatchQueue.global(qos: DispatchQoS.background.qosClass).async{
+                if self.currentMessageCount > self.maxMessageCount{
+                    self.removeOldLine()
+                }else{
+                    self.currentMessageCount += 1
+                }
+            }
+        }
+        
+    }
+    
+    func removeOldLine(){
+        let tempText = chatTextView.text!
+        
+        if let endIndex = tempText.index(of: "\r\n") {
+            let range = tempText.startIndex..<tempText.index(endIndex, offsetBy: 1)
+            DispatchQueue.main.async{
+                self.chatTextView.text.removeSubrange(range)
+                let range = NSMakeRange((self.chatTextView.text?.characters.count)! - 1, 1)
+                self.chatTextView.scrollRangeToVisible(range)
+            }
         }
     }
     
