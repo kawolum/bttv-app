@@ -13,9 +13,10 @@
 		EC10198E1DCC283F00215E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EC10198D1DCC283F00215E78 /* Assets.xcassets */; };
 		EC1019911DCC283F00215E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC10198F1DCC283F00215E78 /* LaunchScreen.storyboard */; };
 		EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */; };
+		EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */; };
 		EC3E49B41DD04417003509DD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3E49B31DD04417003509DD /* Message.swift */; };
+		EC89673D1DD900B200754832 /* Emote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673C1DD900B200754832 /* Emote.swift */; };
 		ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943621DCE8C1B0002E560 /* ysocket.swift */; };
-		ECB943681DCE8C1B0002E560 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = ECB943631DCE8C1B0002E560 /* ytcpsocket.c */; };
 		ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */; };
 		F6E8546B1B759467E4452C8C /* Pods_BTTVCHAT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C07600C2D923AD0C2C7E33 /* Pods_BTTVCHAT.framework */; };
 /* End PBXBuildFile section */
@@ -32,9 +33,10 @@
 		EC1019901DCC283F00215E78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EC1019921DCC283F00215E78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ytcpsocket.c; sourceTree = "<group>"; };
 		EC3E49B31DD04417003509DD /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		EC89673C1DD900B200754832 /* Emote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emote.swift; sourceTree = "<group>"; };
 		ECB943621DCE8C1B0002E560 /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
-		ECB943631DCE8C1B0002E560 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ytcpsocket.c; sourceTree = "<group>"; };
 		ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ytcpsocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,6 +94,7 @@
 				EC1019861DCC283F00215E78 /* AppDelegate.swift */,
 				EC1019881DCC283F00215E78 /* ViewController.swift */,
 				EC3E49B31DD04417003509DD /* Message.swift */,
+				EC89673C1DD900B200754832 /* Emote.swift */,
 				EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */,
 				EC10198A1DCC283F00215E78 /* Main.storyboard */,
 				EC10198D1DCC283F00215E78 /* Assets.xcassets */,
@@ -105,7 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				ECB943621DCE8C1B0002E560 /* ysocket.swift */,
-				ECB943631DCE8C1B0002E560 /* ytcpsocket.c */,
+				EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */,
 				ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */,
 			);
 			name = SwiftSocket;
@@ -146,6 +149,7 @@
 				TargetAttributes = {
 					EC1019821DCC283F00215E78 = {
 						CreatedOnToolsVersion = 8.0;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -237,10 +241,11 @@
 				ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */,
 				EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */,
 				EC1019891DCC283F00215E78 /* ViewController.swift in Sources */,
-				ECB943681DCE8C1B0002E560 /* ytcpsocket.c in Sources */,
 				EC3E49B41DD04417003509DD /* Message.swift in Sources */,
 				EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */,
 				ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */,
+				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
+				EC89673D1DD900B200754832 /* Emote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,10 +369,12 @@
 			baseConfigurationReference = 5083F02A34E2AF456B0D7DF4 /* Pods-BTTVCHAT.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = BTTVCHAT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = KALUM.BTTVCHAT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -377,6 +384,7 @@
 			baseConfigurationReference = E6918C15D2C2FB5EF113E2E6 /* Pods-BTTVCHAT.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = BTTVCHAT/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = KALUM.BTTVCHAT;

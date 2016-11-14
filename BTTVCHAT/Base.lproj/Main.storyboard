@@ -21,11 +21,19 @@
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="eMe-cl-3MU">
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26H-DK-Jo2">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Dis-bd-F39">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <attributedString key="attributedText"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no"/>
-                                    </textView>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" id="UGa-Tk-pJG">
+                                                <rect key="frame" x="0.0" y="28" width="343" height="44"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UGa-Tk-pJG" id="Pan-2l-7nU">
+                                                    <frame key="frameInset" width="343" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hzx-d3-3AL">
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dns-Bc-oUq">
@@ -51,12 +59,12 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="26H-DK-Jo2" secondAttribute="trailing" id="4tw-u2-ryy"/>
-                                    <constraint firstItem="26H-DK-Jo2" firstAttribute="top" secondItem="eMe-cl-3MU" secondAttribute="top" id="9bS-jn-4ts"/>
                                     <constraint firstAttribute="bottom" secondItem="hzx-d3-3AL" secondAttribute="bottom" id="DzS-zM-0XW"/>
-                                    <constraint firstItem="hzx-d3-3AL" firstAttribute="top" secondItem="26H-DK-Jo2" secondAttribute="bottom" id="N2c-7K-hkO"/>
+                                    <constraint firstAttribute="trailing" secondItem="Dis-bd-F39" secondAttribute="trailing" id="FPc-n5-n8R"/>
+                                    <constraint firstItem="hzx-d3-3AL" firstAttribute="top" secondItem="Dis-bd-F39" secondAttribute="bottom" id="VaD-b5-mBm"/>
+                                    <constraint firstItem="Dis-bd-F39" firstAttribute="top" secondItem="eMe-cl-3MU" secondAttribute="top" id="of0-1F-1rs"/>
+                                    <constraint firstItem="Dis-bd-F39" firstAttribute="leading" secondItem="eMe-cl-3MU" secondAttribute="leading" id="rtu-Ti-D2t"/>
                                     <constraint firstItem="hzx-d3-3AL" firstAttribute="leading" secondItem="eMe-cl-3MU" secondAttribute="leading" id="u0s-X0-boC"/>
-                                    <constraint firstItem="26H-DK-Jo2" firstAttribute="leading" secondItem="eMe-cl-3MU" secondAttribute="leading" id="xSr-m9-mK2"/>
                                     <constraint firstAttribute="trailing" secondItem="hzx-d3-3AL" secondAttribute="trailing" id="zWP-Yi-mJt"/>
                                 </constraints>
                             </stackView>
@@ -71,7 +79,7 @@
                     </view>
                     <connections>
                         <outlet property="bottomConstraint" destination="1dY-Ds-N9z" id="Tyr-BZ-eY8"/>
-                        <outlet property="chatTextView" destination="26H-DK-Jo2" id="caS-qz-UB6"/>
+                        <outlet property="chatTableView" destination="Dis-bd-F39" id="lqt-h3-KYI"/>
                         <outlet property="mainStackView" destination="eMe-cl-3MU" id="GcA-Cj-cCX"/>
                         <outlet property="messageTextField" destination="Dns-Bc-oUq" id="q2o-mY-WcE"/>
                         <outlet property="sendButton" destination="UIK-N3-n70" id="Yld-7i-N0u"/>

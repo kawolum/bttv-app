@@ -8,33 +8,38 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate{
+class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var mainStackView: UIStackView!
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
-    @IBOutlet weak var chatTextView: UITextView!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var chatTableView: UITableView!
     
-    var maxMessageCount = 50
-    var currentMessageCount = 0
+    var maxMessageCount = 200
+    
+    var messages = [Message]()
+    var images = [String : UIImage]()
     
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
     var pass: String? = "oauth:3jzkmsisl13cls2529jezdrl20xqdk"
     var nick: String? = "kawolum822"
-    var channel: String? = "c9sneaky"
+    var channel: String? = "kawolum822"
+    var headerAcceptKey = "Accept"
+    var headerAcceptValue = "application/vnd.twitchtv.v3+json"
+    var headerClientIDKey = "Client-ID"
+    var headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.automaticallyAdjustsScrollViewInsets = false
+        getBadges()
+        chatTableView.delegate = self
+        chatTableView.dataSource = self
         configureTextField()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         configureChat()
-        //chatTextView.textContainer.lineBreakMode = NSLineBreakMode.byTruncatingHead
-        //textView.textContainer.maximumNumberOfLines = 10;
-        //textView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
     }
     
     func configureChat(){
@@ -146,45 +151,32 @@ class ViewController: UIViewController, UITextFieldDelegate{
                     }
                 }
                 let message = Message(attributes: attributes)
-                appendMessagetoView(message: message)
+                print(message.message)
+                appendMessageToTableView(message: message)
             }
         } catch {
             print("regular expression error")
         }
     }
     
-    func appendMessagetoView(message:Message){
+    func appendMessageToTableView(message:Message){
         DispatchQueue.main.async{
-            if self.currentMessageCount != 0{
-                self.chatTextView.text.append("\r\n" + message.displayName + ": " + message.message)
-            }else{
-                
-                self.chatTextView.text.append(message.displayName + ": " + message.message)
-            }
-            let range = NSMakeRange((self.chatTextView.text?.characters.count)! - 1, 1)
-            self.chatTextView.scrollRangeToVisible(range)
             
-            DispatchQueue.global(qos: DispatchQoS.background.qosClass).async{
-                if self.currentMessageCount > self.maxMessageCount{
-                    self.removeOldLine()
-                }else{
-                    self.currentMessageCount += 1
-                }
+            self.messages.append(message)
+            let bottomIndexPath = IndexPath(row: (self.messages.count - 1), section: 0)
+            UIView.setAnimationsEnabled(false)
+            
+            self.chatTableView.insertRows(at: [bottomIndexPath], with: UITableViewRowAnimation.none)
+            
+            self.chatTableView.scrollToRow(at: bottomIndexPath, at: UITableViewScrollPosition.bottom, animated: false)
+            
+            if(self.messages.count > self.maxMessageCount){
+                
+                self.messages.removeFirst()
+                let topIndexPath = IndexPath(row: 0, section: 0)
+                self.chatTableView.deleteRows(at: [topIndexPath], with: UITableViewRowAnimation.none)
             }
-        }
-        
-    }
-    
-    func removeOldLine(){
-        let tempText = chatTextView.text!
-        
-        if let endIndex = tempText.index(of: "\r\n") {
-            let range = tempText.startIndex..<tempText.index(endIndex, offsetBy: 1)
-            DispatchQueue.main.async{
-                self.chatTextView.text.removeSubrange(range)
-                let range = NSMakeRange((self.chatTextView.text?.characters.count)! - 1, 1)
-                self.chatTextView.scrollRangeToVisible(range)
-            }
+            UIView.setAnimationsEnabled(true)
         }
     }
     
@@ -220,6 +212,7 @@ class ViewController: UIViewController, UITextFieldDelegate{
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
         self.bottomConstraint.constant += keyboardFrame.height
+
     }
     
     func keyboardWillHide(notification: NSNotification) {
@@ -228,6 +221,208 @@ class ViewController: UIViewController, UITextFieldDelegate{
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
         self.bottomConstraint.constant = 0
+
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
+        
+        let index = indexPath.row
+        
+        cell.textLabel?.attributedText = makeAttributedString(message: messages[index])
+        
+        return cell
+    }
+    
+    func makeAttributedString(message:Message) -> NSAttributedString {
+        
+        let finalString = NSMutableAttributedString()
+        
+        if let badges = message.badges{
+            for badge in badges{
+                if let badgeImage = images[badge]{
+                    let badgeAttachment = NSTextAttachment()
+                    badgeAttachment.image = badgeImage
+                    
+                    let badgeString = NSAttributedString(attachment: badgeAttachment)
+                    
+                    finalString.append(badgeString)
+                }
+            }
+        }
+        
+        let displayNameAttributes = [NSForegroundColorAttributeName: hexStringToUIColor(hex:message.color)]
+        let displayNameString = NSMutableAttributedString(string: message.displayName, attributes: displayNameAttributes)
+        finalString.append(displayNameString)
+
+        finalString.append(NSAttributedString(string: ": "))
+        
+        var currentIndex = 0;
+        var currentString = ""
+        var skip = 0;
+        for index in message.message.characters.indices{
+            if skip > 0{
+                skip -= 1
+            }else{
+                if message.emotes.count > 0, currentIndex == message.emotes[0].startIndex{
+                    finalString.append(NSAttributedString(string: currentString))
+                    currentString = ""
+                    
+                    if let emote = images[message.emotes[0].emoteID]{
+                        let emoteAttachment = NSTextAttachment()
+                        emoteAttachment.image = emote
+                        
+                        let emoteString = NSAttributedString(attachment: emoteAttachment)
+                        
+                        finalString.append(emoteString)
+                    }else{
+                        getEmote(emoteid: message.emotes[0].emoteID)
+                    }
+                    skip = message.emotes[0].length
+                    message.emotes.removeFirst()
+                    
+                    
+                }else{
+                    currentString.append(message.message[index])
+                }
+            }
+            
+            currentIndex += 1
+            
+        }
+        
+        if currentString != "" {
+            finalString.append(NSAttributedString(string: currentString))
+        }
+        return finalString
+    }
+    
+    func getBadges(){
+        
+        let badgesAPIURL = "https://badges.twitch.tv/v1/badges/global/display?language=en"
+        
+        //let badgesAPIURL = "https://api.twitch.tv/kraken/chat/\(channel!)/badges"
+        
+        if let newBadgesAPIURL = URL(string: badgesAPIURL) {
+            
+            var request = URLRequest(url: newBadgesAPIURL )
+            request.httpMethod = "GET"
+            //request.addValue(headerAcceptValue, forHTTPHeaderField: headerAcceptKey)
+            //request.addValue(headerClientIDValue, forHTTPHeaderField: headerClientIDKey)
+            
+            let session = URLSession.shared
+        
+            session.dataTask(with: request){ data, response, err in
+                if err == nil{
+                    if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                            var imagesURL = [String: String]()
+                            
+                            if let dictionary = json as? [String: Any], let badgesets = dictionary["badge_sets"] as? [String: Any]{
+                                for (key, value) in badgesets{
+                                    
+                                    let badge = key
+                                    if let versions = value as? [String: Any], let newVersions = versions["versions"] as? [String: Any]{
+                                        for (key, value) in newVersions{
+                                            
+                                            let badgeversion = key
+                                            if let details = value as? [String: Any]{
+                                                if let imageurl1x = details["image_url_1x"] as? String {
+                                                    imagesURL["\(badge)/\(badgeversion)"] = imageurl1x
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            for (key, value) in imagesURL {
+                                if let url = URL(string: value) {
+                                    self.downloadImage(url: url, key: key)
+                                }
+                            }
+                        } catch let error as NSError {
+                            print("Failed to load: \(error.localizedDescription)")
+                        }
+                        
+                    }
+                }else{
+                    print("getBadges: \(err?.localizedDescription)")
+                }
+            }.resume()
+        }
+    }
+    
+    func getEmote(emoteid: String){
+        
+        let emotesURL = "http://static-cdn.jtvnw.net/emoticons/v1/\(emoteid)/1.0"
+        
+        if let url = URL(string: emotesURL) {
+            self.downloadImage(url: url, key: emoteid)
+        }
+    }
+    
+    func downloadImage(url : URL, key : String) {
+        let session = URLSession.shared
+        
+        session.dataTask(with: url ){ data, response, err in
+            if err == nil{
+                if let newData = data, let newImage = UIImage(data: newData){
+                    self.images[key] = newImage
+                }
+            }else{
+                print("downloadImage: \(err?.localizedDescription)")
+            }
+        }.resume()
+    }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.characters.count) != 6) {
+            return randomColor()
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    func randomColor() -> UIColor {
+        
+        let randomRed:CGFloat = CGFloat(drand48())
+        
+        let randomGreen:CGFloat = CGFloat(drand48())
+        
+        let randomBlue:CGFloat = CGFloat(drand48())
+        
+        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 }
 
