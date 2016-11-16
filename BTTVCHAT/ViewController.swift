@@ -19,6 +19,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     var messages = [Message]()
     var images = [String : UIImage]()
+    var bttvEmoteId = [String: String]()
+    var bttvEmoteUrlTemplate: String?
     
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
     var pass: String? = "oauth:3jzkmsisl13cls2529jezdrl20xqdk"
@@ -32,6 +34,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         getBadges()
+        getBTTVEmoteId()
         chatTableView.delegate = self
         chatTableView.dataSource = self
         configureTextField()
@@ -243,6 +246,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func makeAttributedString(message:Message) -> NSAttributedString {
+        let words = message.message.components(separatedBy: " ")
+        var currentbttvIndex = 0
+        
+        for word in words{
+            if isBTTVEmote(word: word){
+                message.emotes.append(Emote(emoteID: word, startIndex: currentbttvIndex, length: word.characters.count - 1, better: true))
+            }
+            currentbttvIndex += word.characters.count + 1
+        }
+        message.emotes.sort(by: {$0.startIndex < $1.startIndex})
         
         let finalString = NSMutableAttributedString()
         
@@ -268,6 +281,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         var currentIndex = 0;
         var currentString = ""
         var skip = 0;
+        
         for index in message.message.characters.indices{
             if skip > 0{
                 skip -= 1
@@ -277,6 +291,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                     currentString = ""
                     
                     if let emote = images[message.emotes[0].emoteID]{
+                        print("in array")
+                        
                         let emoteAttachment = NSTextAttachment()
                         emoteAttachment.image = emote
                         
@@ -284,7 +300,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                         
                         finalString.append(emoteString)
                     }else{
-                        getEmote(emoteid: message.emotes[0].emoteID)
+                        if message.emotes[0].better {
+                            getBTTVEmote(emoteCode: message.emotes[0].emoteID)
+                        }else{
+                            print(message.emotes[0].emoteID)
+                            getEmote(emoteid: message.emotes[0].emoteID)
+                        }
                     }
                     skip = message.emotes[0].length
                     message.emotes.removeFirst()
@@ -303,6 +324,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             finalString.append(NSAttributedString(string: currentString))
         }
         return finalString
+    }
+    
+    func isBTTVEmote(word: String) -> Bool{
+        if bttvEmoteId[word] != nil{
+            return true
+        }
+        return false
     }
     
     func getBadges(){
@@ -358,6 +386,101 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                     print("getBadges: \(err?.localizedDescription)")
                 }
             }.resume()
+        }
+    }
+    
+    func getBTTVEmoteId(){
+        var BTTVEmotesAPIURL = "https://api.betterttv.net/2/emotes"
+        
+        if let newBTTVEmotesAPIURL = URL(string: BTTVEmotesAPIURL) {
+            
+            var request = URLRequest(url: newBTTVEmotesAPIURL )
+            request.httpMethod = "GET"
+            
+            let session = URLSession.shared
+            
+            session.dataTask(with: request){ data, response, err in
+                if err == nil{
+                    if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                            
+                            if let dictionary = json as? [String: Any], let urlTemplate = dictionary["urlTemplate"] as? String{
+                                
+                                var newUrlTemplate = "https:"
+                                newUrlTemplate.append(urlTemplate.replacingOccurrences(of: "{{image}}", with: "1x"))
+                                self.bttvEmoteUrlTemplate = newUrlTemplate
+                                
+                                if let emotes = dictionary["emotes"] as? [[String:Any]]{
+                                    for emote in emotes{
+                                        if let _ = emote["channel"] as? String {
+                                            
+                                        }else{
+                                            if let id = emote["id"] as? String, let code = emote["code"] as? String {
+                                                self.bttvEmoteId[code] = id
+                                            }
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            }
+                        } catch let error as NSError {
+                            print("Failed to load: \(error.localizedDescription)")
+                        }
+                        
+                    }
+                }else{
+                    print("getBadges: \(err?.localizedDescription)")
+                }
+            }.resume()
+        }
+        
+        BTTVEmotesAPIURL = "https://api.betterttv.net/2/channels/\(channel!)"
+        if let newBTTVEmotesAPIURL = URL(string: BTTVEmotesAPIURL){
+            var request = URLRequest(url: newBTTVEmotesAPIURL )
+            request.httpMethod = "GET"
+            
+            let session = URLSession.shared
+            
+            session.dataTask(with: request){ data, response, err in
+                if err == nil{
+                    if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
+                        do {
+                            let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                            
+                            if let dictionary = json as? [String: Any]{
+                                if let emotes = dictionary["emotes"] as? [[String:Any]]{
+                                    for emote in emotes{
+                                        if let BTTVChannel = emote["channel"] as? String, BTTVChannel == self.channel! {
+                                            if let id = emote["id"] as? String, let code = emote["code"] as? String {
+                                                self.bttvEmoteId[code] = id
+                                            }
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            }
+                        } catch let error as NSError {
+                            print("Failed to load: \(error.localizedDescription)")
+                        }
+                        
+                    }
+                }else{
+                    print("getBadges: \(err?.localizedDescription)")
+                }
+                }.resume()
+        }
+    }
+    
+    func getBTTVEmote(emoteCode: String){
+        if var urlstring = bttvEmoteUrlTemplate, let emoteid = bttvEmoteId[emoteCode]{
+            urlstring = urlstring.replacingOccurrences(of: "{{id}}", with: emoteid)
+            
+            if let url = URL(string: urlstring){
+                self.downloadImage(url: url, key: emoteCode)
+            }
         }
     }
     
@@ -423,18 +546,5 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
-    }
-}
-
-extension NSRange {
-    func range(for str: String) -> Range<String.Index>? {
-        guard location != NSNotFound else { return nil }
-        
-        guard let fromUTFIndex = str.utf16.index(str.utf16.startIndex, offsetBy: location, limitedBy: str.utf16.endIndex) else { return nil }
-        guard let toUTFIndex = str.utf16.index(fromUTFIndex, offsetBy: length, limitedBy: str.utf16.endIndex) else { return nil }
-        guard let fromIndex = String.Index(fromUTFIndex, within: str) else { return nil }
-        guard let toIndex = String.Index(toUTFIndex, within: str) else { return nil }
-        
-        return fromIndex ..< toIndex
     }
 }

@@ -6,8 +6,6 @@
 //  Copyright © 2016 Ka Lum. All rights reserved.
 //
 
-import UIKit
-
 class Message{
     var badges:[String]?
     var color = ""
@@ -63,7 +61,7 @@ class Message{
                     break;
                 case ",":
                     if let currentStartIndexInt = Int(currentStartIndex), let currentEndIndexInt = Int(currentEndIndex) {
-                        emotes.append(Emote(emoteID: currentEmoteID, startIndex: currentStartIndexInt, length: currentEndIndexInt - currentStartIndexInt))
+                        emotes.append(Emote(emoteID: currentEmoteID, startIndex: currentStartIndexInt, length: currentEndIndexInt - currentStartIndexInt, better: false))
                     }
                     currentStartIndex = ""
                     currentEndIndex = ""
@@ -74,7 +72,7 @@ class Message{
                     break;
                 case "/":
                     if let currentStartIndexInt = Int(currentStartIndex), let currentEndIndexInt = Int(currentEndIndex) {
-                        emotes.append(Emote(emoteID: currentEmoteID, startIndex: currentStartIndexInt, length: currentEndIndexInt - currentStartIndexInt))
+                        emotes.append(Emote(emoteID: currentEmoteID, startIndex: currentStartIndexInt, length: currentEndIndexInt - currentStartIndexInt, better: false))
                     }
                     currentEmoteID = ""
                     currentStartIndex = ""
@@ -98,7 +96,7 @@ class Message{
             }
         }
         if let currentStartIndexInt = Int(currentStartIndex), let currentEndIndexInt = Int(currentEndIndex) {
-            emotes.append(Emote(emoteID: currentEmoteID, startIndex: currentStartIndexInt, length: currentEndIndexInt - currentStartIndexInt))
+            emotes.append(Emote(emoteID: currentEmoteID, startIndex: currentStartIndexInt, length: currentEndIndexInt - currentStartIndexInt, better: false))
         }
         
         emotes.sort(by: {$0.startIndex < $1.startIndex})

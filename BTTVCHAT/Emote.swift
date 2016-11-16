@@ -12,10 +12,12 @@ class Emote: NSObject {
     var emoteID: String
     var startIndex: Int
     var length: Int
+    var better = false
     
-    init(emoteID: String, startIndex: Int, length: Int){
+    init(emoteID: String, startIndex: Int, length: Int, better: Bool){
         self.emoteID = emoteID
         self.startIndex = startIndex
         self.length = length
+        self.better = better
     }
 }

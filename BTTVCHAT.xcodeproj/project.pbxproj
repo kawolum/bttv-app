@@ -16,6 +16,9 @@
 		EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */; };
 		EC3E49B41DD04417003509DD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3E49B31DD04417003509DD /* Message.swift */; };
 		EC89673D1DD900B200754832 /* Emote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673C1DD900B200754832 /* Emote.swift */; };
+		EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673E1DDC180A00754832 /* NSRangeExtension.swift */; };
+		EC8967431DDC2D8300754832 /* StreamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */; };
+		EC8967451DDC2EC900754832 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967441DDC2EC900754832 /* Stream.swift */; };
 		ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943621DCE8C1B0002E560 /* ysocket.swift */; };
 		ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */; };
 		F6E8546B1B759467E4452C8C /* Pods_BTTVCHAT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C07600C2D923AD0C2C7E33 /* Pods_BTTVCHAT.framework */; };
@@ -36,6 +39,9 @@
 		EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ytcpsocket.c; sourceTree = "<group>"; };
 		EC3E49B31DD04417003509DD /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		EC89673C1DD900B200754832 /* Emote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emote.swift; sourceTree = "<group>"; };
+		EC89673E1DDC180A00754832 /* NSRangeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRangeExtension.swift; sourceTree = "<group>"; };
+		EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsTableViewController.swift; sourceTree = "<group>"; };
+		EC8967441DDC2EC900754832 /* Stream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
 		ECB943621DCE8C1B0002E560 /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
 		ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ytcpsocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,8 +100,11 @@
 				EC1019861DCC283F00215E78 /* AppDelegate.swift */,
 				EC1019881DCC283F00215E78 /* ViewController.swift */,
 				EC3E49B31DD04417003509DD /* Message.swift */,
+				EC89673E1DDC180A00754832 /* NSRangeExtension.swift */,
+				EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */,
 				EC89673C1DD900B200754832 /* Emote.swift */,
 				EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */,
+				EC8967441DDC2EC900754832 /* Stream.swift */,
 				EC10198A1DCC283F00215E78 /* Main.storyboard */,
 				EC10198D1DCC283F00215E78 /* Assets.xcassets */,
 				EC10198F1DCC283F00215E78 /* LaunchScreen.storyboard */,
@@ -238,14 +247,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC8967451DDC2EC900754832 /* Stream.swift in Sources */,
 				ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */,
 				EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */,
 				EC1019891DCC283F00215E78 /* ViewController.swift in Sources */,
+				EC8967431DDC2D8300754832 /* StreamsTableViewController.swift in Sources */,
 				EC3E49B41DD04417003509DD /* Message.swift in Sources */,
 				EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */,
 				ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */,
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
 				EC89673D1DD900B200754832 /* Emote.swift in Sources */,
+				EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
