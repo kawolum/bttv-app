@@ -43,11 +43,11 @@ class TwitchChatClient: NSObject {
                 DispatchQueue.global(qos: DispatchQoS.utility.qosClass).async {self.beginReadingData()}
                 self.authenticate()
                 self.joinChannel()
-//                if self.isJoinComplete() {
-//                    //DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass).async {self.beginReadingLines()}
-//                }else{
-//                    print("failed to configure chat")
-//                }
+                if self.isJoinComplete() {
+                    DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass).async {self.beginReadingLines()}
+                }else{
+                    print("failed to configure chat")
+                }
             }else{
                 print(errmsg)
             }
@@ -80,16 +80,14 @@ class TwitchChatClient: NSObject {
     
     func isJoinComplete() -> Bool{
         while(true){
-            if lines.count > 0 {
-                print(lines.count)
+            if !lines.isEmpty {
                 var line : String?
                 concurrentLineQueue.sync{
                     line = self.lines.first
                     self.lines.removeFirst()
                 }
                 if let newLine = line{
-                    print(newLine)
-                    if newLine.hasSuffix("End of /NAMES list\r"){
+                    if newLine.hasSuffix("End of /NAMES list"){
                         return true
                     }
                 }
@@ -105,12 +103,29 @@ class TwitchChatClient: NSObject {
                 for line in linesFromData {
                     concurrentLineQueue.async{
                         self.lines.append(line)
-//                        self.concurrentMessageQueue.async{
-//                            //print(newNum)
-//                            if let newLine = self.lines.first, let message = self.parseMessage(line: newLine) {
-//                                self.addMessage(message: message)
-//                            }
-//                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func beginReadingLines(){
+        print("Begin Reading l")
+        
+        while(true){
+            if !lines.isEmpty {
+                var line : String?
+                concurrentLineQueue.sync{
+                    line = self.lines.first
+                    self.lines.removeFirst()
+                }
+                if let newLine = line{
+                    if let message = parseMessage(line: newLine){
+                        concurrentMessageQueue.async{
+                            self.messages.append(message)
+                            print(message.message)
+                            print(self.messages.count)
+                        }
                     }
                 }
             }
@@ -137,7 +152,7 @@ class TwitchChatClient: NSObject {
     func parseMessage(line:String) -> Message?{
         do {
             let input = line
-            let regex = try NSRegularExpression(pattern: "^@badges=(.*);color=(.*);display-name=(.*);emotes=(.*);id=(?:.*);mod=([01]{1});room-id=([0-9]*);(?:sent-ts=.*;)?subscriber=([01]{1});(?:tmi-sent-ts=[0-9]*)?;turbo=([01]{1});user-id=([0-9]*);user-type=(.*) PRIVMSG #" + channel! + " :(.*)$")
+            let regex = try NSRegularExpression(pattern: "^@badges=(.*);color=(.*);display-name=(.*);emotes=(.*);id=(?:.*);mod=([01]{1});room-id=([0-9]*);(?:sent-ts=.*;)?subscriber=([01]{1});(?:tmi-sent-ts=[0-9]*)?;turbo=([01]{1});user-id=([0-9]*);user-type=(.*) PRIVMSG #\(channel) :(.*)$")
             let matches = regex.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
             
             if let match = matches.first {
