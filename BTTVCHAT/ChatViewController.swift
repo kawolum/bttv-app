@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource{
+class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var mainStackView: UIStackView!
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
@@ -27,14 +27,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var nick: String? = "kawolum822"
     var channel: String? = "kawolum822"
     var headerAcceptKey = "Accept"
-    var headerAcceptValue = "application/vnd.twitchtv.v3+json"
+    var headerAcceptValue = "application/vnd.twitchtv.v5+json"
     var headerClientIDKey = "Client-ID"
     var headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
+    var twitchChatClient = TwitchChatClient(channel: "faceittv")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        getBadges()
-        getBTTVEmoteId()
+        
+        //getGlobalBadges()
+        //getBTTVEmotesId()
         chatTableView.delegate = self
         chatTableView.dataSource = self
         configureTextField()
@@ -42,7 +45,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        configureChat()
+        //configureChat()
+        twitchChatClient.start()
     }
     
     func configureChat(){
@@ -333,18 +337,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         return false
     }
     
-    func getBadges(){
+    func getGlobalBadges(){
         
-        let badgesAPIURL = "https://badges.twitch.tv/v1/badges/global/display?language=en"
+        let badgesAPIURLString = "https://badges.twitch.tv/v1/badges/global/display?language=en"
         
         //let badgesAPIURL = "https://api.twitch.tv/kraken/chat/\(channel!)/badges"
         
-        if let newBadgesAPIURL = URL(string: badgesAPIURL) {
+        if let badgesAPIURL = URL(string: badgesAPIURLString) {
             
-            var request = URLRequest(url: newBadgesAPIURL )
+            var request = URLRequest(url: badgesAPIURL )
             request.httpMethod = "GET"
-            //request.addValue(headerAcceptValue, forHTTPHeaderField: headerAcceptKey)
-            //request.addValue(headerClientIDValue, forHTTPHeaderField: headerClientIDKey)
             
             let session = URLSession.shared
         
@@ -389,12 +391,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
     }
     
-    func getBTTVEmoteId(){
-        var BTTVEmotesAPIURL = "https://api.betterttv.net/2/emotes"
+    func getGlobalBTTVEmotesId(){
+        let emotesAPIURLString = "https://api.betterttv.net/2/emotes"
         
-        if let newBTTVEmotesAPIURL = URL(string: BTTVEmotesAPIURL) {
+        if let emotesAPIURL = URL(string: emotesAPIURLString) {
             
-            var request = URLRequest(url: newBTTVEmotesAPIURL )
+            var request = URLRequest(url: emotesAPIURL )
             request.httpMethod = "GET"
             
             let session = URLSession.shared
@@ -423,7 +425,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                                         
                                     }
                                 }
-                                
                             }
                         } catch let error as NSError {
                             print("Failed to load: \(error.localizedDescription)")
@@ -433,12 +434,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 }else{
                     print("getBadges: \(err?.localizedDescription)")
                 }
-            }.resume()
+                }.resume()
         }
+    }
+    
+    func getBTTVEmotesId(){
+        let emotesAPIURLString = "https://api.betterttv.net/2/channels/\(channel!)"
         
-        BTTVEmotesAPIURL = "https://api.betterttv.net/2/channels/\(channel!)"
-        if let newBTTVEmotesAPIURL = URL(string: BTTVEmotesAPIURL){
-            var request = URLRequest(url: newBTTVEmotesAPIURL )
+        if let emotesAPIURL = URL(string: emotesAPIURLString){
+            
+            var request = URLRequest(url: emotesAPIURL )
             request.httpMethod = "GET"
             
             let session = URLSession.shared

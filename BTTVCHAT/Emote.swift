@@ -6,9 +6,7 @@
 //  Copyright © 2016 Ka Lum. All rights reserved.
 //
 
-import UIKit
-
-class Emote: NSObject {
+class Emote{
     var emoteID: String
     var startIndex: Int
     var length: Int

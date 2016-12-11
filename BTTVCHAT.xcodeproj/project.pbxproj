@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1019861DCC283F00215E78 /* AppDelegate.swift */; };
-		EC1019891DCC283F00215E78 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1019881DCC283F00215E78 /* ViewController.swift */; };
+		EC1019891DCC283F00215E78 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1019881DCC283F00215E78 /* ChatViewController.swift */; };
 		EC10198C1DCC283F00215E78 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC10198A1DCC283F00215E78 /* Main.storyboard */; };
 		EC10198E1DCC283F00215E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EC10198D1DCC283F00215E78 /* Assets.xcassets */; };
 		EC1019911DCC283F00215E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC10198F1DCC283F00215E78 /* LaunchScreen.storyboard */; };
@@ -19,6 +19,7 @@
 		EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673E1DDC180A00754832 /* NSRangeExtension.swift */; };
 		EC8967431DDC2D8300754832 /* StreamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */; };
 		EC8967451DDC2EC900754832 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967441DDC2EC900754832 /* Stream.swift */; };
+		EC8B91611DFD10CB0045ECD0 /* TwitchChatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */; };
 		ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943621DCE8C1B0002E560 /* ysocket.swift */; };
 		ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */; };
 		F6E8546B1B759467E4452C8C /* Pods_BTTVCHAT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C07600C2D923AD0C2C7E33 /* Pods_BTTVCHAT.framework */; };
@@ -30,7 +31,7 @@
 		E6918C15D2C2FB5EF113E2E6 /* Pods-BTTVCHAT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BTTVCHAT.release.xcconfig"; path = "Pods/Target Support Files/Pods-BTTVCHAT/Pods-BTTVCHAT.release.xcconfig"; sourceTree = "<group>"; };
 		EC1019831DCC283F00215E78 /* BTTVCHAT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BTTVCHAT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC1019861DCC283F00215E78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EC1019881DCC283F00215E78 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EC1019881DCC283F00215E78 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		EC10198B1DCC283F00215E78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EC10198D1DCC283F00215E78 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EC1019901DCC283F00215E78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -42,6 +43,7 @@
 		EC89673E1DDC180A00754832 /* NSRangeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRangeExtension.swift; sourceTree = "<group>"; };
 		EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsTableViewController.swift; sourceTree = "<group>"; };
 		EC8967441DDC2EC900754832 /* Stream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
+		EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitchChatClient.swift; sourceTree = "<group>"; };
 		ECB943621DCE8C1B0002E560 /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
 		ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ytcpsocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,21 +98,46 @@
 		EC1019851DCC283F00215E78 /* BTTVCHAT */ = {
 			isa = PBXGroup;
 			children = (
+				EC8B915F1DFD108F0045ECD0 /* Object */,
+				EC8B915E1DFD107D0045ECD0 /* ViewController */,
+				EC8B915D1DFD10630045ECD0 /* Extension */,
 				ECB9436C1DCF68920002E560 /* SwiftSocket */,
 				EC1019861DCC283F00215E78 /* AppDelegate.swift */,
-				EC1019881DCC283F00215E78 /* ViewController.swift */,
-				EC3E49B31DD04417003509DD /* Message.swift */,
-				EC89673E1DDC180A00754832 /* NSRangeExtension.swift */,
-				EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */,
-				EC89673C1DD900B200754832 /* Emote.swift */,
-				EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */,
-				EC8967441DDC2EC900754832 /* Stream.swift */,
 				EC10198A1DCC283F00215E78 /* Main.storyboard */,
 				EC10198D1DCC283F00215E78 /* Assets.xcassets */,
 				EC10198F1DCC283F00215E78 /* LaunchScreen.storyboard */,
 				EC1019921DCC283F00215E78 /* Info.plist */,
 			);
 			path = BTTVCHAT;
+			sourceTree = "<group>";
+		};
+		EC8B915D1DFD10630045ECD0 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				EC89673E1DDC180A00754832 /* NSRangeExtension.swift */,
+				EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */,
+			);
+			name = Extension;
+			sourceTree = "<group>";
+		};
+		EC8B915E1DFD107D0045ECD0 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				EC1019881DCC283F00215E78 /* ChatViewController.swift */,
+				EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		EC8B915F1DFD108F0045ECD0 /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				EC89673C1DD900B200754832 /* Emote.swift */,
+				EC3E49B31DD04417003509DD /* Message.swift */,
+				EC8967441DDC2EC900754832 /* Stream.swift */,
+				EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */,
+			);
+			name = Object;
 			sourceTree = "<group>";
 		};
 		ECB9436C1DCF68920002E560 /* SwiftSocket */ = {
@@ -250,7 +277,7 @@
 				EC8967451DDC2EC900754832 /* Stream.swift in Sources */,
 				ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */,
 				EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */,
-				EC1019891DCC283F00215E78 /* ViewController.swift in Sources */,
+				EC1019891DCC283F00215E78 /* ChatViewController.swift in Sources */,
 				EC8967431DDC2D8300754832 /* StreamsTableViewController.swift in Sources */,
 				EC3E49B41DD04417003509DD /* Message.swift in Sources */,
 				EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */,
@@ -258,6 +285,7 @@
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
 				EC89673D1DD900B200754832 /* Emote.swift in Sources */,
 				EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */,
+				EC8B91611DFD10CB0045ECD0 /* TwitchChatClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
