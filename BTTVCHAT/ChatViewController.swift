@@ -31,7 +31,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var headerClientIDKey = "Client-ID"
     var headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
-    var twitchChatClient = TwitchChatClient(channel: "faceittv")
+    var twitchChatClient = TwitchChatClient(channel: "nl_kripp")
     
     override func viewDidLoad() {
         super.viewDidLoad()

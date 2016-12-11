@@ -21,7 +21,7 @@ class TwitchChatClient: NSObject {
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
     var pass: String? = "oauth:3jzkmsisl13cls2529jezdrl20xqdk"
     var nick: String? = "kawolum822"
-    var channel: String? = "kawolum822"
+    var channel: String?
     var headerAcceptKey = "Accept"
     var headerAcceptValue = "application/vnd.twitchtv.v5+json"
     var headerClientIDKey = "Client-ID"
@@ -83,8 +83,7 @@ class TwitchChatClient: NSObject {
             if !lines.isEmpty {
                 var line : String?
                 concurrentLineQueue.sync{
-                    line = self.lines.first
-                    self.lines.removeFirst()
+                    line = lines.removeFirst()
                 }
                 if let newLine = line{
                     if newLine.hasSuffix("End of /NAMES list"){
@@ -110,22 +109,17 @@ class TwitchChatClient: NSObject {
     }
     
     func beginReadingLines(){
-        print("Begin Reading l")
+        print("Begin Reading lines")
         
         while(true){
             if !lines.isEmpty {
                 var line : String?
                 concurrentLineQueue.sync{
-                    line = self.lines.first
-                    self.lines.removeFirst()
+                    line = lines.removeFirst()
                 }
-                if let newLine = line{
-                    if let message = parseMessage(line: newLine){
-                        concurrentMessageQueue.async{
-                            self.messages.append(message)
-                            print(message.message)
-                            print(self.messages.count)
-                        }
+                if let message = parseMessage(line: line!){
+                    concurrentMessageQueue.async{
+                        self.messages.append(message)
                     }
                 }
             }
@@ -152,7 +146,7 @@ class TwitchChatClient: NSObject {
     func parseMessage(line:String) -> Message?{
         do {
             let input = line
-            let regex = try NSRegularExpression(pattern: "^@badges=(.*);color=(.*);display-name=(.*);emotes=(.*);id=(?:.*);mod=([01]{1});room-id=([0-9]*);(?:sent-ts=.*;)?subscriber=([01]{1});(?:tmi-sent-ts=[0-9]*)?;turbo=([01]{1});user-id=([0-9]*);user-type=(.*) PRIVMSG #\(channel) :(.*)$")
+            let regex = try NSRegularExpression(pattern: "^@badges=(.*);color=(.*);display-name=(.*);emotes=(.*);id=(?:.*);mod=([01]{1});room-id=([0-9]*);(?:sent-ts=.*;)?subscriber=([01]{1});(?:tmi-sent-ts=[0-9]*)?;turbo=([01]{1});user-id=([0-9]*);user-type=(.*) PRIVMSG #\(channel!) :(.*)$")
             let matches = regex.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
             
             if let match = matches.first {
