@@ -59,9 +59,7 @@ class TwitchChatClient: NSObject {
     func authenticate(){
         if pass != nil && nick != nil {
             var (success,errmsg) = client.send(str: "PASS " + pass! + "\r\n")
-            print((success ? "PASS " + pass! : errmsg))
             (success,errmsg) = client.send(str: "NICK " + nick! + "\r\n")
-            print((success ? "NICK " + nick! : errmsg))
         }else{
             print("pass or nick is nil")
         }
@@ -69,10 +67,8 @@ class TwitchChatClient: NSObject {
     
     func joinChannel(){
         if channel != nil{
-            var (success,errmsg) = client.send(str: "JOIN #" + channel! + "\r\n")
-            print((success ? "JOIN #" + channel! : errmsg))
-            (success,errmsg) = client.send(str: "CAP REQ :twitch.tv/tags\r\n")
-            print((success ? "send CAP REQ :twitch.tv/tags" : errmsg))
+            var (success,errmsg) = client.send(str: "CAP REQ :twitch.tv/tags\r\n")
+            (success,errmsg) = client.send(str: "JOIN #" + channel! + "\r\n")
         }else{
             print("channel is nil")
         }
@@ -102,6 +98,7 @@ class TwitchChatClient: NSObject {
                 for line in linesFromData {
                     concurrentLineQueue.async{
                         self.lines.append(line)
+                        //print(line)
                     }
                 }
             }
@@ -117,9 +114,13 @@ class TwitchChatClient: NSObject {
                 concurrentLineQueue.sync{
                     line = lines.removeFirst()
                 }
-                if let message = parseMessage(line: line!){
-                    concurrentMessageQueue.async{
-                        self.messages.append(message)
+                if line!.hasPrefix("PING"){
+                    pongBack(pingLine: line!)
+                }else {
+                    if let message = parseMessage(line: line!){
+                        concurrentMessageQueue.async{
+                            self.messages.append(message)
+                        }
                     }
                 }
             }

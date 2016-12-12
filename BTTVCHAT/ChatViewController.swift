@@ -18,10 +18,12 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var maxMessageCount = 200
     
     var messages = [Message]()
+    var badges = [String: String]()
+    var badgeImages = [String : UIImage]()
     var images = [String : UIImage]()
     var bttvEmoteId = [String: String]()
     var bttvEmoteUrlTemplate: String?
-    
+
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
     var pass: String? = "oauth:3jzkmsisl13cls2529jezdrl20xqdk"
     var nick: String? = "kawolum822"
@@ -31,13 +33,12 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var headerClientIDKey = "Client-ID"
     var headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
-    var twitchChatClient = TwitchChatClient(channel: "nl_kripp")
+    var twitchChatClient = TwitchChatClient(channel: "kawolum822")
+    
+    var nsAttributedString = [NSAttributedString]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //getGlobalBadges()
-        //getBTTVEmotesId()
         chatTableView.delegate = self
         chatTableView.dataSource = self
         configureTextField()
@@ -45,24 +46,34 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //configureChat()
-        twitchChatClient.start()
+        
+        getStuff()
+        self.twitchChatClient.start()
+        self.getMessages()
+        
     }
     
-    func configureChat(){
-        DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
-            let (success,errmsg) = self.client.connect(timeout: 10)
-            
-            if success{
-                self.authenticate()
-                self.joinChannel()
-                if self.isJoinComplete() {
-                    self.beginReadingChat()
-                }else{
-                    print("failed to configure chat")
+    func complete(bool: Bool){
+        print(bool)
+    }
+    
+    func getStuff(){
+        self.getGlobalBadges(){
+            self.getChannelBadges()
+        }
+        self.getGlobalBTTVEmotesId()
+        self.getChannelBTTVEmotesId()
+    }
+    
+    func getMessages(){
+        DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass).async {
+            while(true){
+                if let message = self.twitchChatClient.pop(){
+                    print(message.message)
+                    self.nsAttributedString.append(self.makeAttributedString(message: message))
+                    print(self.nsAttributedString.last)
+                    self.chatTableView.reloadData()
                 }
-            }else{
-                print(errmsg)
             }
         }
     }
@@ -72,98 +83,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-
-    func readLine()->String?{
-        var line:String?
-        
-        let data = client.read(1024)
-        
-        if let d = data{
-            if let str = String(bytes: d, encoding: String.Encoding.utf8){
-                line = str
-            }
-        }
-        
-        return line
-    }
-    
-    func authenticate(){
-        if pass != nil && nick != nil {
-            var (success,errmsg) = client.send(str: "PASS " + pass! + "\r\n")
-            print((success ? "PASS " + pass! : errmsg))
-            (success,errmsg) = client.send(str: "NICK " + nick! + "\r\n")
-            print((success ? "NICK " + nick! : errmsg))
-        }else{
-            print("pass or nick is nil")
-        }
-    }
-    
-    func joinChannel(){
-        if channel != nil{
-            var (success,errmsg) = client.send(str: "JOIN #" + channel! + "\r\n")
-            print((success ? "JOIN #" + channel! : errmsg))
-            (success,errmsg) = client.send(str: "CAP REQ :twitch.tv/tags\r\n")
-            print((success ? "send CAP REQ :twitch.tv/tags\r\n" : errmsg))
-        }else{
-            print("channel is nil")
-        }
-    }
-    
-    func isJoinComplete() -> Bool{
-        while(true){
-            if let line = readLine(){
-                if line.contains("End of /NAMES list"){
-                    return true
-                }
-            }else{
-                return false
-            }
-        }
-    }
-    
-    func beginReadingChat(){
-        var reading = true
-        
-        while(reading){
-            if let line = self.readLine(){
-                if line.hasPrefix("PING") {
-                    let newLine = line.replacingOccurrences(of: "PING", with: "PONG")
-                    let (success,errmsg) = self.client.send(str: newLine)
-                    print((success ? newLine : errmsg))
-                }else{
-                    parseMessage(line: line)
-                }
-            }else{
-                reading = false
-            }
-        }
-    }
-    
-    func parseMessage(line:String){
-        do {
-            let input = line
-            let regex = try NSRegularExpression(pattern: "^@badges=(.*);color=(.*);display-name=(.*);emotes=(.*);id=(?:.*);mod=([01]{1});room-id=([0-9]*);(?:sent-ts=.*;)?subscriber=([01]{1});(?:tmi-sent-ts=[0-9]*)?;turbo=([01]{1});user-id=([0-9]*);user-type=(.*) PRIVMSG #" + channel! + " :(.*)$")
-            let matches = regex.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
-            
-            if let match = matches.first {
-                let lastRangeIndex = match.numberOfRanges - 1
-                var attributes = [String]()
-                
-                for i in 1...lastRangeIndex{
-                    let range = match.rangeAt(i)
-                    if let swiftRange = range.range(for: input) {
-                        let string = line.substring(with: swiftRange)
-                        attributes.append(string)
-                    }
-                }
-                let message = Message(attributes: attributes)
-                print(message.message)
-                appendMessageToTableView(message: message)
-            }
-        } catch {
-            print("regular expression error")
-        }
     }
     
     func appendMessageToTableView(message:Message){
@@ -236,7 +155,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count
+        return nsAttributedString.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -244,7 +163,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         let index = indexPath.row
         
-        cell.textLabel?.attributedText = makeAttributedString(message: messages[index])
+        cell.textLabel?.attributedText = nsAttributedString[index]
         
         return cell
     }
@@ -265,13 +184,24 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         
         if let badges = message.badges{
             for badge in badges{
-                if let badgeImage = images[badge]{
+                if let badgeImage = badgeImages[badge]{
                     let badgeAttachment = NSTextAttachment()
                     badgeAttachment.image = badgeImage
                     
                     let badgeString = NSAttributedString(attachment: badgeAttachment)
                     
                     finalString.append(badgeString)
+                }else{
+                    if let stringurl = self.badges[badge], let uRL = URL(string: stringurl) {
+                        downloadImage(url: uRL){ (badgeImage) in
+                            let badgeAttachment = NSTextAttachment()
+                            badgeAttachment.image = badgeImage
+                            let badgeString = NSAttributedString(attachment: badgeAttachment)
+                            finalString.append(badgeString)
+
+                        }
+                    }
+                    
                 }
             }
         }
@@ -337,11 +267,10 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return false
     }
     
-    func getGlobalBadges(){
+    func getGlobalBadges(completion: @escaping () -> Void){
         
         let badgesAPIURLString = "https://badges.twitch.tv/v1/badges/global/display?language=en"
         
-        //let badgesAPIURL = "https://api.twitch.tv/kraken/chat/\(channel!)/badges"
         
         if let badgesAPIURL = URL(string: badgesAPIURLString) {
             
@@ -355,7 +284,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                     if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
                         do {
                             let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                            var imagesURL = [String: String]()
                             
                             if let dictionary = json as? [String: Any], let badgesets = dictionary["badge_sets"] as? [String: Any]{
                                 for (key, value) in badgesets{
@@ -367,18 +295,65 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                                             let badgeversion = key
                                             if let details = value as? [String: Any]{
                                                 if let imageurl1x = details["image_url_1x"] as? String {
-                                                    imagesURL["\(badge)/\(badgeversion)"] = imageurl1x
+                                                    self.badges["\(badge)/\(badgeversion)"] = imageurl1x
+                                                    print("\(badge)/\(badgeversion)")
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                            for (key, value) in imagesURL {
-                                if let url = URL(string: value) {
-                                    self.downloadImage(url: url, key: key)
+                            
+                        } catch let error as NSError {
+                            print("Failed to load: \(error.localizedDescription)")
+                        }
+                        
+                    }
+                }else{
+                    print("getBadges: \(err?.localizedDescription)")
+                }
+                
+                completion()
+            }.resume()
+        }
+    }
+    
+    func getChannelBadges(){
+        let badgesAPIURLString = "https://badges.twitch.tv/v1/badges/channels/51496027/display?language=en"
+        
+        if let badgesAPIURL = URL(string: badgesAPIURLString) {
+            
+            var request = URLRequest(url: badgesAPIURL )
+            request.httpMethod = "GET"
+            
+            let session = URLSession.shared
+            
+            session.dataTask(with: request){ data, response, err in
+                if err == nil{
+                    if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
+                        do {
+                            
+                            let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                            
+                            if let dictionary = json as? [String: Any], let badgesets = dictionary["badge_sets"] as? [String: Any]{
+                                for (key, value) in badgesets{
+                                    
+                                    let badge = key
+                                    if let versions = value as? [String: Any], let newVersions = versions["versions"] as? [String: Any]{
+                                        for (key, value) in newVersions{
+                                            
+                                            let badgeversion = key
+                                            if let details = value as? [String: Any]{
+                                                if let imageurl1x = details["image_url_1x"] as? String {
+                                                    self.badges["\(badge)/\(badgeversion)"] = imageurl1x
+                                                    print("\(badge)/\(badgeversion)")
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
+                            
                         } catch let error as NSError {
                             print("Failed to load: \(error.localizedDescription)")
                         }
@@ -405,6 +380,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 if err == nil{
                     if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
                         do {
+                            print("global bttv emotes json")
                             let json = try JSONSerialization.jsonObject(with: data!, options: [])
                             
                             if let dictionary = json as? [String: Any], let urlTemplate = dictionary["urlTemplate"] as? String{
@@ -431,14 +407,15 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                         }
                         
                     }
+                    print("got general bttv emote id")
                 }else{
                     print("getBadges: \(err?.localizedDescription)")
                 }
-                }.resume()
+            }.resume()
         }
     }
     
-    func getBTTVEmotesId(){
+    func getChannelBTTVEmotesId(){
         let emotesAPIURLString = "https://api.betterttv.net/2/channels/\(channel!)"
         
         if let emotesAPIURL = URL(string: emotesAPIURLString){
@@ -472,10 +449,11 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                         }
                         
                     }
+                    print("got bttv emote id")
                 }else{
                     print("getBadges: \(err?.localizedDescription)")
                 }
-                }.resume()
+            }.resume()
         }
     }
     
@@ -484,7 +462,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             urlstring = urlstring.replacingOccurrences(of: "{{id}}", with: emoteid)
             
             if let url = URL(string: urlstring){
-                self.downloadImage(url: url, key: emoteCode)
+                //self.downloadImage(url: url, key: emoteCode)
             }
         }
     }
@@ -494,17 +472,17 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         let emotesURL = "http://static-cdn.jtvnw.net/emoticons/v1/\(emoteid)/1.0"
         
         if let url = URL(string: emotesURL) {
-            self.downloadImage(url: url, key: emoteid)
+            //self.downloadImage(url: url, key: emoteid)
         }
     }
     
-    func downloadImage(url : URL, key : String) {
+    func downloadImage(url : URL, completion: @escaping(UIImage) -> Void) {
         let session = URLSession.shared
         
         session.dataTask(with: url ){ data, response, err in
             if err == nil{
                 if let newData = data, let newImage = UIImage(data: newData){
-                    self.images[key] = newImage
+                    completion(newImage)
                 }
             }else{
                 print("downloadImage: \(err?.localizedDescription)")
