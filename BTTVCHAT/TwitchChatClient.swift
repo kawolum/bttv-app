@@ -94,9 +94,10 @@ class TwitchChatClient: NSObject {
         print("Begin Reading Data")
         
         while(true){
-            if let linesFromData = self.getLinesFromData(){
+            if let linesFromData = self.getLinesFromData(), linesFromData.count > 0{
                 for line in linesFromData {
                     concurrentLineQueue.async{
+                        // this line has error
                         self.lines.append(line)
                         //print(line)
                     }

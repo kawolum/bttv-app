@@ -33,7 +33,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var headerClientIDKey = "Client-ID"
     var headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
-    var twitchChatClient = TwitchChatClient(channel: "kawolum822")
+    var twitchChatClient = TwitchChatClient(channel: "meteos")
     
     var nsAttributedString = [NSAttributedString]()
     
@@ -70,9 +70,14 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             while(true){
                 if let message = self.twitchChatClient.pop(){
                     print(message.message)
-                    self.nsAttributedString.append(self.makeAttributedString(message: message))
-                    print(self.nsAttributedString.last)
-                    self.chatTableView.reloadData()
+                        self.downloadRequiredBadges(badges: message.badges!){
+                            self.nsAttributedString.append(self.makeAttributedString(message: message))
+                            DispatchQueue.main.async{
+                            
+                                self.chatTableView.reloadData()
+                            }
+                        }
+                    
                 }
             }
         }
@@ -194,6 +199,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 }else{
                     if let stringurl = self.badges[badge], let uRL = URL(string: stringurl) {
                         downloadImage(url: uRL){ (badgeImage) in
+                            self.badgeImages[badge] = badgeImage
                             let badgeAttachment = NSTextAttachment()
                             badgeAttachment.image = badgeImage
                             let badgeString = NSAttributedString(attachment: badgeAttachment)
@@ -258,6 +264,28 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             finalString.append(NSAttributedString(string: currentString))
         }
         return finalString
+    }
+    
+    func downloadRequiredBadges(badges : [String], completion: @escaping() -> Void){
+        print(badges)
+        
+        let group = DispatchGroup()
+        
+        for badge in badges{
+            if badgeImages[badge] == nil{
+                group.enter()
+                if let stringurl = self.badges[badge], let uRL = URL(string: stringurl) {
+                    downloadImage(url: uRL){ (badgeImage) in
+                        self.badgeImages[badge] = badgeImage
+                        group.leave()
+                    }
+                }
+            }
+        }
+        
+        group.notify(queue: DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)){
+            completion()
+        }
     }
     
     func isBTTVEmote(word: String) -> Bool{
@@ -482,6 +510,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         session.dataTask(with: url ){ data, response, err in
             if err == nil{
                 if let newData = data, let newImage = UIImage(data: newData){
+                    print(url)
                     completion(newImage)
                 }
             }else{

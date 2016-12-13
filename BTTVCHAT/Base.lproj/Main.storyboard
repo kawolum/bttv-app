@@ -82,7 +82,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hzx-d3-3AL">
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dns-Bc-oUq">
-                                                <frame key="frameInset" width="302" height="40"/>
+                                                <frame key="frameInset" width="277" height="40"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="twitter"/>
@@ -90,6 +90,9 @@
                                                     <action selector="textFieldDidChange:" destination="BYZ-38-t0r" eventType="editingChanged" id="H7R-uk-akc"/>
                                                 </connections>
                                             </textField>
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="gMX-YQ-fQH">
+                                                <frame key="frameInset" minX="282" width="20" height="40"/>
+                                            </activityIndicatorView>
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIK-N3-n70">
                                                 <frame key="frameInset" minX="307" width="36" height="40"/>
                                                 <state key="normal" title="Send"/>

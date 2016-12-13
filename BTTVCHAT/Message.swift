@@ -20,7 +20,7 @@ class Message{
     var message = ""
     
     init(attributes:[String]) {
-        badges = attributes[0].components(separatedBy: ",")
+        badges = attributes[0].components(separatedBy: ",").filter{!$0.isEmpty}
         color = attributes[1]
         displayName = attributes[2]
         self.populateEmotes(emoteString: attributes[3])
