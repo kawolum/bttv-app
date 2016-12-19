@@ -20,6 +20,7 @@
 		EC8967431DDC2D8300754832 /* StreamsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */; };
 		EC8967451DDC2EC900754832 /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967441DDC2EC900754832 /* Stream.swift */; };
 		EC8B91611DFD10CB0045ECD0 /* TwitchChatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */; };
+		EC8B91631E07A9370045ECD0 /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91621E07A9370045ECD0 /* MessageController.swift */; };
 		ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943621DCE8C1B0002E560 /* ysocket.swift */; };
 		ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */; };
 		F6E8546B1B759467E4452C8C /* Pods_BTTVCHAT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C07600C2D923AD0C2C7E33 /* Pods_BTTVCHAT.framework */; };
@@ -44,6 +45,7 @@
 		EC8967421DDC2D8300754832 /* StreamsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamsTableViewController.swift; sourceTree = "<group>"; };
 		EC8967441DDC2EC900754832 /* Stream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stream.swift; sourceTree = "<group>"; };
 		EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitchChatClient.swift; sourceTree = "<group>"; };
+		EC8B91621E07A9370045ECD0 /* MessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageController.swift; sourceTree = "<group>"; };
 		ECB943621DCE8C1B0002E560 /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
 		ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ytcpsocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -136,6 +138,7 @@
 				EC3E49B31DD04417003509DD /* Message.swift */,
 				EC8967441DDC2EC900754832 /* Stream.swift */,
 				EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */,
+				EC8B91621E07A9370045ECD0 /* MessageController.swift */,
 			);
 			name = Object;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
 				EC89673D1DD900B200754832 /* Emote.swift in Sources */,
 				EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */,
+				EC8B91631E07A9370045ECD0 /* MessageController.swift in Sources */,
 				EC8B91611DFD10CB0045ECD0 /* TwitchChatClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -20,7 +20,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var messages = [Message]()
     var badges = [String: String]()
     var badgeImages = [String : UIImage]()
-    var images = [String : UIImage]()
+    var emoteImages = [String : UIImage]()
     var bttvEmoteId = [String: String]()
     var bttvEmoteUrlTemplate: String?
 
@@ -33,7 +33,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var headerClientIDKey = "Client-ID"
     var headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
-    var twitchChatClient = TwitchChatClient(channel: "meteos")
+    var twitchChatClient = TwitchChatClient(channel: "kawolum822")
     
     var nsAttributedString = [NSAttributedString]()
     
@@ -68,16 +68,20 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     func getMessages(){
         DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass).async {
             while(true){
-                if let message = self.twitchChatClient.pop(){
+                if var message = self.twitchChatClient.pop(){
+                    message = self.checkBTTVEmote(message: message)
                     print(message.message)
-                        self.downloadRequiredBadges(badges: message.badges!){
+                    print(message.emotes.count)
+                    self.downloadRequiredBadges(badges: message.badges!){
+                            
+                        self.downloadRequiredEmotes(emotes: message.emotes){
                             self.nsAttributedString.append(self.makeAttributedString(message: message))
                             DispatchQueue.main.async{
-                            
+                                
                                 self.chatTableView.reloadData()
                             }
                         }
-                    
+                    }
                 }
             }
         }
@@ -174,17 +178,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     func makeAttributedString(message:Message) -> NSAttributedString {
-        let words = message.message.components(separatedBy: " ")
-        var currentbttvIndex = 0
-        
-        for word in words{
-            if isBTTVEmote(word: word){
-                message.emotes.append(Emote(emoteID: word, startIndex: currentbttvIndex, length: word.characters.count - 1, better: true))
-            }
-            currentbttvIndex += word.characters.count + 1
-        }
-        message.emotes.sort(by: {$0.startIndex < $1.startIndex})
-        
         let finalString = NSMutableAttributedString()
         
         if let badges = message.badges{
@@ -196,18 +189,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                     let badgeString = NSAttributedString(attachment: badgeAttachment)
                     
                     finalString.append(badgeString)
-                }else{
-                    if let stringurl = self.badges[badge], let uRL = URL(string: stringurl) {
-                        downloadImage(url: uRL){ (badgeImage) in
-                            self.badgeImages[badge] = badgeImage
-                            let badgeAttachment = NSTextAttachment()
-                            badgeAttachment.image = badgeImage
-                            let badgeString = NSAttributedString(attachment: badgeAttachment)
-                            finalString.append(badgeString)
-
-                        }
-                    }
-                    
                 }
             }
         }
@@ -227,10 +208,12 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                 skip -= 1
             }else{
                 if message.emotes.count > 0, currentIndex == message.emotes[0].startIndex{
+                    print(message.emotes[0].emoteID)
+                    
                     finalString.append(NSAttributedString(string: currentString))
                     currentString = ""
                     
-                    if let emote = images[message.emotes[0].emoteID]{
+                    if let emote = emoteImages[message.emotes[0].emoteID]{
                         print("in array")
                         
                         let emoteAttachment = NSTextAttachment()
@@ -240,12 +223,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
                         
                         finalString.append(emoteString)
                     }else{
-                        if message.emotes[0].better {
-                            getBTTVEmote(emoteCode: message.emotes[0].emoteID)
-                        }else{
-                            print(message.emotes[0].emoteID)
-                            getEmote(emoteid: message.emotes[0].emoteID)
-                        }
+                        print("missing \(message.emotes[0].emoteID)")
                     }
                     skip = message.emotes[0].length
                     message.emotes.removeFirst()
@@ -266,8 +244,24 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return finalString
     }
     
+    func checkBTTVEmote(message: Message) -> Message{
+        let words = message.message.components(separatedBy: " ")
+        var currentbttvIndex = 0
+        
+        for word in words{
+            print(word)
+            if isBTTVEmote(word: word){
+                print("is bttv emote")
+                message.emotes.append(Emote(emoteID: bttvEmoteId[word]!, startIndex: currentbttvIndex, length: word.characters.count - 1, better: true))
+            }
+            currentbttvIndex += word.characters.count + 1
+        }
+        message.emotes.sort(by: {$0.startIndex < $1.startIndex})
+        
+        return message
+    }
+    
     func downloadRequiredBadges(badges : [String], completion: @escaping() -> Void){
-        print(badges)
         
         let group = DispatchGroup()
         
@@ -286,6 +280,39 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         group.notify(queue: DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)){
             completion()
         }
+    }
+    
+    func downloadRequiredEmotes(emotes: [Emote], completion: @escaping() -> Void){
+        let group = DispatchGroup()
+        
+        for emote in emotes{
+            if emoteImages[emote.emoteID] == nil{
+                group.enter()
+                
+                let stringurl : String?
+                
+                if emote.better{
+                    stringurl = getBTTVEmoteURL(emoteCode: emote.emoteID)
+                }else{
+                    stringurl = getEmoteURL(emoteid: emote.emoteID)
+                }
+                
+                print(stringurl)
+                
+                if stringurl != nil, let url = URL(string: stringurl!){
+                    downloadImage(url: url){ (emoteImage) in
+                        self.emoteImages[emote.emoteID] = emoteImage
+                        group.leave()
+                    }
+                }
+                
+            }
+        }
+        
+        group.notify(queue: DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)){
+            completion()
+        }
+        
     }
     
     func isBTTVEmote(word: String) -> Bool{
@@ -485,23 +512,21 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
     }
     
-    func getBTTVEmote(emoteCode: String){
-        if var urlstring = bttvEmoteUrlTemplate, let emoteid = bttvEmoteId[emoteCode]{
-            urlstring = urlstring.replacingOccurrences(of: "{{id}}", with: emoteid)
+    func getBTTVEmoteURL(emoteCode: String) -> String? {
+        if var urlstring = bttvEmoteUrlTemplate{
+            urlstring = urlstring.replacingOccurrences(of: "{{id}}", with: emoteCode)
             
-            if let url = URL(string: urlstring){
-                //self.downloadImage(url: url, key: emoteCode)
-            }
+            return urlstring
         }
+        
+        return nil
     }
     
-    func getEmote(emoteid: String){
+    func getEmoteURL(emoteid: String) -> String? {
         
         let emotesURL = "http://static-cdn.jtvnw.net/emoticons/v1/\(emoteid)/1.0"
         
-        if let url = URL(string: emotesURL) {
-            //self.downloadImage(url: url, key: emoteid)
-        }
+        return emotesURL
     }
     
     func downloadImage(url : URL, completion: @escaping(UIImage) -> Void) {
@@ -510,7 +535,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         session.dataTask(with: url ){ data, response, err in
             if err == nil{
                 if let newData = data, let newImage = UIImage(data: newData){
-                    print(url)
                     completion(newImage)
                 }
             }else{
