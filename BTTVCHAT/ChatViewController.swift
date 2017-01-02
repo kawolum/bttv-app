@@ -33,7 +33,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var headerClientIDKey = "Client-ID"
     var headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
-    var twitchChatClient = TwitchChatClient(channel: "kawolum822")
+    var twitchChatClient : TwitchChatClient?
     
     var nsAttributedString = [NSAttributedString]()
     
@@ -46,10 +46,12 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        getStuff()
-        self.twitchChatClient.start()
-        self.getMessages()
+        DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
+            self.twitchChatClient = TwitchChatClient(channel: "kawolum822")
+            self.twitchChatClient!.start()
+        }
+        //getStuff()
+        //self.getMessages()
         
     }
     
@@ -57,35 +59,35 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         print(bool)
     }
     
-    func getStuff(){
-        self.getGlobalBadges(){
-            self.getChannelBadges()
-        }
-        self.getGlobalBTTVEmotesId()
-        self.getChannelBTTVEmotesId()
-    }
+//    func getStuff(){
+//        self.getGlobalBadges(){
+//            self.getChannelBadges()
+//        }
+//        self.getGlobalBTTVEmotesId()
+//        self.getChannelBTTVEmotesId()
+//    }
     
-    func getMessages(){
-        DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass).async {
-            while(true){
-                if var message = self.twitchChatClient.pop(){
-                    message = self.checkBTTVEmote(message: message)
-                    print(message.message)
-                    print(message.emotes.count)
-                    self.downloadRequiredBadges(badges: message.badges!){
-                            
-                        self.downloadRequiredEmotes(emotes: message.emotes){
-                            self.nsAttributedString.append(self.makeAttributedString(message: message))
-                            DispatchQueue.main.async{
-                                
-                                self.chatTableView.reloadData()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    func getMessages(){
+//        DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass).async {
+//            while(true){
+//                if var message = self.twitchChatClient.pop(){
+//                    message = self.checkBTTVEmote(message: message)
+//                    print(message.message)
+//                    print(message.emotes.count)
+//                    self.downloadRequiredBadges(badges: message.badges!){
+//                            
+//                        self.downloadRequiredEmotes(emotes: message.emotes){
+//                            self.nsAttributedString.append(self.makeAttributedString(message: message))
+//                            DispatchQueue.main.async{
+//                                
+//                                self.chatTableView.reloadData()
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func configureTextField(){
         messageTextField.delegate = self
@@ -177,89 +179,89 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         return cell
     }
     
-    func makeAttributedString(message:Message) -> NSAttributedString {
-        let finalString = NSMutableAttributedString()
-        
-        if let badges = message.badges{
-            for badge in badges{
-                if let badgeImage = badgeImages[badge]{
-                    let badgeAttachment = NSTextAttachment()
-                    badgeAttachment.image = badgeImage
-                    
-                    let badgeString = NSAttributedString(attachment: badgeAttachment)
-                    
-                    finalString.append(badgeString)
-                }
-            }
-        }
-        
-        let displayNameAttributes = [NSForegroundColorAttributeName: hexStringToUIColor(hex:message.color)]
-        let displayNameString = NSMutableAttributedString(string: message.displayName, attributes: displayNameAttributes)
-        finalString.append(displayNameString)
-
-        finalString.append(NSAttributedString(string: ": "))
-        
-        var currentIndex = 0;
-        var currentString = ""
-        var skip = 0;
-        
-        for index in message.message.characters.indices{
-            if skip > 0{
-                skip -= 1
-            }else{
-                if message.emotes.count > 0, currentIndex == message.emotes[0].startIndex{
-                    print(message.emotes[0].emoteID)
-                    
-                    finalString.append(NSAttributedString(string: currentString))
-                    currentString = ""
-                    
-                    if let emote = emoteImages[message.emotes[0].emoteID]{
-                        print("in array")
-                        
-                        let emoteAttachment = NSTextAttachment()
-                        emoteAttachment.image = emote
-                        
-                        let emoteString = NSAttributedString(attachment: emoteAttachment)
-                        
-                        finalString.append(emoteString)
-                    }else{
-                        print("missing \(message.emotes[0].emoteID)")
-                    }
-                    skip = message.emotes[0].length
-                    message.emotes.removeFirst()
-                    
-                    
-                }else{
-                    currentString.append(message.message[index])
-                }
-            }
-            
-            currentIndex += 1
-            
-        }
-        
-        if currentString != "" {
-            finalString.append(NSAttributedString(string: currentString))
-        }
-        return finalString
-    }
+//    func makeAttributedString(message:Message) -> NSAttributedString {
+//        let finalString = NSMutableAttributedString()
+//        
+//        if let badges = message.badges{
+//            for badge in badges{
+//                if let badgeImage = badgeImages[badge]{
+//                    let badgeAttachment = NSTextAttachment()
+//                    badgeAttachment.image = badgeImage
+//                    
+//                    let badgeString = NSAttributedString(attachment: badgeAttachment)
+//                    
+//                    finalString.append(badgeString)
+//                }
+//            }
+//        }
+//        
+//        let displayNameAttributes = [NSForegroundColorAttributeName: hexStringToUIColor(hex:message.color)]
+//        let displayNameString = NSMutableAttributedString(string: message.displayName, attributes: displayNameAttributes)
+//        finalString.append(displayNameString)
+//
+//        finalString.append(NSAttributedString(string: ": "))
+//        
+//        var currentIndex = 0;
+//        var currentString = ""
+//        var skip = 0;
+//        
+//        for index in message.message.characters.indices{
+//            if skip > 0{
+//                skip -= 1
+//            }else{
+//                if message.emotes.count > 0, currentIndex == message.emotes[0].startIndex{
+//                    print(message.emotes[0].emoteID)
+//                    
+//                    finalString.append(NSAttributedString(string: currentString))
+//                    currentString = ""
+//                    
+//                    if let emote = emoteImages[message.emotes[0].emoteID]{
+//                        print("in array")
+//                        
+//                        let emoteAttachment = NSTextAttachment()
+//                        emoteAttachment.image = emote
+//                        
+//                        let emoteString = NSAttributedString(attachment: emoteAttachment)
+//                        
+//                        finalString.append(emoteString)
+//                    }else{
+//                        print("missing \(message.emotes[0].emoteID)")
+//                    }
+//                    skip = message.emotes[0].length
+//                    message.emotes.removeFirst()
+//                    
+//                    
+//                }else{
+//                    currentString.append(message.message[index])
+//                }
+//            }
+//            
+//            currentIndex += 1
+//            
+//        }
+//        
+//        if currentString != "" {
+//            finalString.append(NSAttributedString(string: currentString))
+//        }
+//        return finalString
+//    }
     
-    func checkBTTVEmote(message: Message) -> Message{
-        let words = message.message.components(separatedBy: " ")
-        var currentbttvIndex = 0
-        
-        for word in words{
-            print(word)
-            if isBTTVEmote(word: word){
-                print("is bttv emote")
-                message.emotes.append(Emote(emoteID: bttvEmoteId[word]!, startIndex: currentbttvIndex, length: word.characters.count - 1, better: true))
-            }
-            currentbttvIndex += word.characters.count + 1
-        }
-        message.emotes.sort(by: {$0.startIndex < $1.startIndex})
-        
-        return message
-    }
+//    func checkBTTVEmote(message: Message) -> Message{
+//        let words = message.message.components(separatedBy: " ")
+//        var currentbttvIndex = 0
+//        
+//        for word in words{
+//            print(word)
+//            if isBTTVEmote(word: word){
+//                print("is bttv emote")
+//                message.emotes.append(Emote(emoteID: bttvEmoteId[word]!, startIndex: currentbttvIndex, length: word.characters.count - 1, better: true))
+//            }
+//            currentbttvIndex += word.characters.count + 1
+//        }
+//        message.emotes.sort(by: {$0.startIndex < $1.startIndex})
+//        
+//        return message
+//    }
     
     func downloadRequiredBadges(badges : [String], completion: @escaping() -> Void){
         

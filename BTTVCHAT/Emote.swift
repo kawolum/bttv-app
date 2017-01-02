@@ -8,12 +8,14 @@
 
 class Emote{
     var emoteID: String
+    var emoteText: String
     var startIndex: Int
     var length: Int
     var better = false
     
-    init(emoteID: String, startIndex: Int, length: Int, better: Bool){
+    init(emoteID : String, emoteText : String, startIndex : Int, length : Int, better : Bool){
         self.emoteID = emoteID
+        self.emoteText = emoteText
         self.startIndex = startIndex
         self.length = length
         self.better = better
