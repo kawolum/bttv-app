@@ -12,12 +12,14 @@ class Emote{
     var startIndex: Int
     var length: Int
     var better = false
+    var imageType: String
     
-    init(emoteID : String, emoteText : String, startIndex : Int, length : Int, better : Bool){
+    init(emoteID: String, emoteText: String, startIndex: Int, length: Int, better: Bool, imageType: String){
         self.emoteID = emoteID
         self.emoteText = emoteText
         self.startIndex = startIndex
         self.length = length
         self.better = better
+        self.imageType = imageType
     }
 }

@@ -6,10 +6,13 @@
 //  Copyright © 2016 Ka Lum. All rights reserved.
 //
 
+import UIKit
+
 class Message{
     var badges = [String]()
     var color = ""
     var displayname = ""
+    var emoteString = ""
     var emotes = [Emote]()
     var id = ""
     var mod = false
@@ -21,5 +24,6 @@ class Message{
     var userid = ""
     var usertype = ""
     var message = ""
+    var nsAttributedString = NSMutableAttributedString()
 }
 

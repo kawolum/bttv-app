@@ -11,27 +11,26 @@ import UIKit
 class MessageController: NSObject {
     
     var lineRegex : NSRegularExpression? = nil
-    var bttvEmotesDictionary : [String : String]?
+    var channel: String?
+    var emoteController: EmoteController?
+    var badgeController: BadgeController?
     
-    init(bttvEmotesDictionary: [String : String]){
+    init(channel: String){
         super.init()
-        self.bttvEmotesDictionary = bttvEmotesDictionary
-        
+        self.channel = channel
         do{
             self.lineRegex = try NSRegularExpression(pattern: "^@(badges)=(.*);(?:(bits)=(.*);)?(color)=(.*);(display-name)=(.*);(emotes)=(.*);(id)=(.*);(mod)=([01]{1});(room-id)=([a-zA-Z0-9]*);(?:(sent-ts)=(.*);)?(subscriber)=([01]{1});(?:(tmi-sent-ts)=(.*))?;(turbo)=([01]{1});(user-id)=(.*);(user-type)=(.*) :.*(PRIVMSG) #.* :(.*)$")
         }catch{
             print("regular expression error")
         }
+        emoteController = EmoteController(channel: channel)
+        badgeController = BadgeController(channel: channel)
     }
     
     func createMessage(line : String) -> Message?{
         if let attributes = parseMessage(line: line), let message = createMessageWithAttributes(attributes: attributes) {
-            checkBTTVEmotes(message : message)
-            sortEmotes(message: message)
-            for emote in message.emotes{
-                print(emote.emoteID)
-                print(emote.emoteText)
-            }
+            emoteController?.createEmotes(message: message)
+            createNSAttributedString(message: message)
             return message
         }
         return nil
@@ -95,7 +94,7 @@ class MessageController: NSObject {
                     message.displayname = displayname
                     break;
                 case "emotes":
-                    message.emotes = createEmotes(emoteString: value)
+                    message.emoteString = value
                     break;
                 case "id":
                     message.id = value
@@ -141,42 +140,104 @@ class MessageController: NSObject {
         return message
     }
     
-    func createEmotes(emoteString: String) -> [Emote]{
-        let differentEmotes = emoteString.components(separatedBy: "/")
-        var emotes = [Emote]()
+    func createNSAttributedString(message: Message){
+        let finalString = NSMutableAttributedString()
         
-        for emote in differentEmotes {
-            let emoteIDPositions = emote.components(separatedBy: ":")
-            let emoteID = emoteIDPositions[0]
-            let emotePositions = emoteIDPositions[1].components(separatedBy: ",")
-            
-            for i in stride(from: 0, to: emotePositions.count, by: 1){
-                let emoteIndexes = emotePositions[i].components(separatedBy: "-")
-                if emoteIndexes.count > 1, let startIndex = Int(emoteIndexes[0]), let endIndex = Int(emoteIndexes[1]){
-                    emotes.append(Emote(emoteID: emoteID, emoteText: "", startIndex: startIndex, length: endIndex - startIndex + 1, better: false))
-                }
+        for badge in message.badges {
+            if let badgeImage = badgeController!.getBadgeImage(badgeName: badge){
+                let badgeAttachment = NSTextAttachment()
+                badgeAttachment.image = badgeImage
+                
+                let badgeString = NSAttributedString(attachment: badgeAttachment)
+                
+                finalString.append(badgeString)
+                finalString.append(NSAttributedString(string: " "))
             }
         }
         
-        return emotes
-    }
-    
-    func checkBTTVEmotes(message: Message){
-        if(bttvEmotesDictionary != nil){
-            let words = message.message.components(separatedBy: " ")
-            var startIndex = 0
-            
-            for word in words{
-                if let id = bttvEmotesDictionary![word]{
-                    message.emotes.append(Emote(emoteID: id, emoteText: word, startIndex: startIndex, length: word.characters.count, better: true))
-                }
-                startIndex += word.characters.count + 1
-            }
+        var displayNameAttributes = [String: Any]()        
+        
+        if message.color.isEmpty {
+            displayNameAttributes[NSForegroundColorAttributeName] = randomColor()
+        }else{
+            displayNameAttributes[NSForegroundColorAttributeName] = hexStringToUIColor(hex:message.color)
         }
+        let displayNameString = NSMutableAttributedString(string: message.displayname, attributes: displayNameAttributes)
+        finalString.append(displayNameString)
+        finalString.append(NSAttributedString(string: ": "))
+        
+        var currentIndex = 0;
+        var currentString = ""
+        var skip = 0
+        var currentEmotesIndex = 0
+        
+        for index in message.message.characters.indices{
+            if skip > 0{
+                skip -= 1
+            }else{
+                if message.emotes.count > currentEmotesIndex, currentIndex == message.emotes[currentEmotesIndex].startIndex{
+                    if !currentString.isEmpty{
+                        finalString.append(NSAttributedString(string: currentString))
+                        currentString = ""
+                    }
+                    
+                    if let emoteImage = emoteController!.getEmoteImage(emote: message.emotes[currentEmotesIndex]){
+                        let emoteAttachment = NSTextAttachment()
+                        emoteAttachment.image = emoteImage
+                        
+                        let emoteString = NSAttributedString(attachment: emoteAttachment)
+                        
+                        finalString.append(emoteString)
+                    }
+                    skip = message.emotes[currentEmotesIndex].length - 1
+                    currentEmotesIndex += 1
+                }else{
+                    currentString.append(message.message[index])
+                }
+            }
+        
+            currentIndex += 1
+        }
+        
+        if !currentString.isEmpty {
+            finalString.append(NSAttributedString(string: currentString))
+        }
+
+        message.nsAttributedString = finalString
     }
     
-    func sortEmotes(message: Message){
-        message.emotes.sort(by: {$0.startIndex < $1.startIndex})
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.characters.count) != 6) {
+            return randomColor()
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    func randomColor() -> UIColor {
+        
+        let randomRed:CGFloat = CGFloat(drand48())
+        
+        let randomGreen:CGFloat = CGFloat(drand48())
+        
+        let randomBlue:CGFloat = CGFloat(drand48())
+        
+        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
     }
     
     //        if displayName == "" {
@@ -187,4 +248,5 @@ class MessageController: NSObject {
     //                displayName = userType.substring(with: range)
     //            }
     //        }
+
 }
