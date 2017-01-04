@@ -178,9 +178,6 @@ class EmoteController: NSObject {
     
     func checkEmotes(message: Message){
         let differentEmotes = message.emoteString.components(separatedBy: "/").filter{!$0.isEmpty}
-        //var lines = string.components(separatedBy: NSCharacterSet.newlines).filter{!$0.isEmpty}
-        
-        
         
         for emote in differentEmotes {
             let emoteIDIndexs = emote.components(separatedBy: CharacterSet(charactersIn: ":-,")).filter{!$0.isEmpty}
