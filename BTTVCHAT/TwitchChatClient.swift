@@ -127,7 +127,7 @@ class TwitchChatClient: NSObject {
     func sendMessage(string: String){
         let line = "PRIVMSG #" + self.channel! + " :" + string + "\r\n"
         let (success,errmsg) = self.client.send(str: line)
-        print((success ? "worked" : errmsg))
+        
         let message = Message()
         message.displayname = nick!
         message.username = nick!
