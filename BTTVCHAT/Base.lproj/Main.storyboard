@@ -67,7 +67,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="eMe-cl-3MU">
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Dis-bd-F39">
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" id="UGa-Tk-pJG" customClass="MessageTableViewCell" customModule="BTTVCHAT" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
@@ -76,19 +76,26 @@
                                                     <frame key="frameInset" width="375" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mHW-pP-8fb">
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mHW-pP-8fb">
+                                                            <attributedString key="attributedText">
+                                                                <fragment content="someone: something">
+                                                                    <attributes>
+                                                                        <color key="NSColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                                        <font key="NSFont" size="17" name="Helvetica"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="mHW-pP-8fb" firstAttribute="top" secondItem="Pan-2l-7nU" secondAttribute="top" id="Gls-Jr-vAh"/>
                                                         <constraint firstAttribute="bottom" secondItem="mHW-pP-8fb" secondAttribute="bottom" constant="5" id="bHu-Nc-cZs"/>
-                                                        <constraint firstAttribute="trailing" secondItem="mHW-pP-8fb" secondAttribute="trailing" constant="10" id="fbI-Mr-DdL"/>
-                                                        <constraint firstItem="mHW-pP-8fb" firstAttribute="leading" secondItem="Pan-2l-7nU" secondAttribute="leading" constant="10" id="jjT-rx-1ad"/>
+                                                        <constraint firstAttribute="trailing" secondItem="mHW-pP-8fb" secondAttribute="trailing" constant="18" id="fbI-Mr-DdL"/>
+                                                        <constraint firstItem="mHW-pP-8fb" firstAttribute="leading" secondItem="Pan-2l-7nU" secondAttribute="leading" constant="18" id="jjT-rx-1ad"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <connections>
                                                     <outlet property="messageLabel" destination="mHW-pP-8fb" id="hzO-37-9i7"/>
                                                 </connections>
@@ -97,8 +104,7 @@
                                     </tableView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hzx-d3-3AL">
                                         <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dns-Bc-oUq">
-                                                <frame key="frameInset" width="309" height="40"/>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" clearButtonMode="unlessEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Dns-Bc-oUq">
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="twitter"/>
@@ -106,26 +112,29 @@
                                                     <action selector="textFieldDidChange:" destination="BYZ-38-t0r" eventType="editingChanged" id="H7R-uk-akc"/>
                                                 </connections>
                                             </textField>
-                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="gMX-YQ-fQH">
-                                                <frame key="frameInset" minX="314" width="20" height="40"/>
-                                            </activityIndicatorView>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIK-N3-n70">
-                                                <frame key="frameInset" minX="339" width="36" height="40"/>
-                                                <state key="normal" title="Send"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UIK-N3-n70">
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="40" id="Ouf-3K-BGq"/>
+                                                </constraints>
+                                                <state key="normal" title="Send">
+                                                    <color key="titleColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="sendButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cxi-O4-8Zr"/>
                                                 </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="UIK-N3-n70" firstAttribute="leading" secondItem="Dns-Bc-oUq" secondAttribute="trailing" constant="5" id="JoU-eE-ico"/>
                                             <constraint firstAttribute="height" constant="40" id="POg-XT-lxL"/>
+                                            <constraint firstAttribute="trailing" secondItem="UIK-N3-n70" secondAttribute="trailing" constant="5" id="Si7-gt-Q4a"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="hzx-d3-3AL" secondAttribute="bottom" id="DzS-zM-0XW"/>
                                     <constraint firstAttribute="trailing" secondItem="Dis-bd-F39" secondAttribute="trailing" id="FPc-n5-n8R"/>
-                                    <constraint firstItem="hzx-d3-3AL" firstAttribute="top" secondItem="Dis-bd-F39" secondAttribute="bottom" id="VaD-b5-mBm"/>
+                                    <constraint firstItem="hzx-d3-3AL" firstAttribute="top" secondItem="Dis-bd-F39" secondAttribute="bottom" constant="3" id="VaD-b5-mBm"/>
                                     <constraint firstItem="Dis-bd-F39" firstAttribute="top" secondItem="eMe-cl-3MU" secondAttribute="top" id="of0-1F-1rs"/>
                                     <constraint firstItem="Dis-bd-F39" firstAttribute="leading" secondItem="eMe-cl-3MU" secondAttribute="leading" id="rtu-Ti-D2t"/>
                                     <constraint firstItem="hzx-d3-3AL" firstAttribute="leading" secondItem="eMe-cl-3MU" secondAttribute="leading" id="u0s-X0-boC"/>
@@ -133,7 +142,7 @@
                                 </constraints>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="eMe-cl-3MU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="07y-Ve-130"/>
                             <constraint firstAttribute="bottomMargin" secondItem="eMe-cl-3MU" secondAttribute="bottom" id="1dY-Ds-N9z"/>

@@ -19,7 +19,7 @@ class MessageController: NSObject {
         super.init()
         self.channel = channel
         do{
-            self.lineRegex = try NSRegularExpression(pattern: "^@(badges)=(.*);(?:(bits)=(.*);)?(color)=(.*);(display-name)=(.*);(emotes)=(.*);(id)=(.*);(mod)=([01]{1});(room-id)=([a-zA-Z0-9]*);(?:(sent-ts)=(.*);)?(subscriber)=([01]{1});(?:(tmi-sent-ts)=(.*))?;(turbo)=([01]{1});(user-id)=(.*);(user-type)=(.*) :.*(PRIVMSG) #.* :(.*)$")
+            self.lineRegex = try NSRegularExpression(pattern: "^@(badges)=(.*);(?:(bits)=(.*);)?(color)=(.*);(display-name)=(.*);(emotes)=(.*);id=.*;mod=[01]{1};room-id=[a-zA-Z0-9]*;(?:sent-ts=.*;)?subscriber=[01]{1};(?:tmi-sent-ts=.*)?;turbo=[01]{1};user-id=.*;user-type=.* (:)(.*)!.*@.*(PRIVMSG) #.* :(.*)$")
         }catch{
             print("regular expression error")
         }
@@ -43,7 +43,7 @@ class MessageController: NSObject {
             if let match = matches.first {
                 var attributes = [String : String]()
                 
-                for i in stride(from: 1, to: match.numberOfRanges, by: 2){
+                for i in stride(from: 1, to: match.numberOfRanges, by: 2){                    
                     var range = match.rangeAt(i)
                     var key : String?
                     var value : String?
@@ -78,9 +78,9 @@ class MessageController: NSObject {
                 case "badges":
                     message.badges = value.components(separatedBy: ",").filter{!$0.isEmpty}
                     break;
-                case "bits":
-                    //IDK
-                    break;
+//                case "bits":
+//                    message.bits = value
+//                    break;
                 case "color":
                     message.color = value
                     break;
@@ -96,38 +96,8 @@ class MessageController: NSObject {
                 case "emotes":
                     message.emoteString = value
                     break;
-                case "id":
-                    message.id = value
-                    break;
-                case "mod":
-                    if value == "1" {
-                        message.mod = true
-                    }
-                    break;
-                case "room-id":
-                    message.roomid = value
-                    break;
-                case "sent-ts":
-                    message.sentts = value
-                    break;
-                case "subscriber":
-                    if value == "1" {
-                        message.subscriber = true
-                    }
-                    break;
-                case "tmi-sent-ts":
-                    message.tmisentts = value
-                    break;
-                case "turbo":
-                    if value == "1" {
-                        message.turbo = true
-                    }
-                    break;
-                case "user-id":
-                    message.userid = value
-                    break;
-                case "user-type":
-                    message.usertype = value
+                case ":":
+                    message.username = value
                     break;
                 case "PRIVMSG":
                     message.message = value
@@ -158,11 +128,17 @@ class MessageController: NSObject {
         var displayNameAttributes = [String: Any]()        
         
         if message.color.isEmpty {
-            displayNameAttributes[NSForegroundColorAttributeName] = randomColor()
+            if let color = DisplayNameColorCache.getColor(key: message.username){
+                displayNameAttributes[NSForegroundColorAttributeName] = color
+            }else{
+                let color = randomColor()
+                displayNameAttributes[NSForegroundColorAttributeName] = color
+                DisplayNameColorCache.setColor(key: message.username, value: color)
+            }
         }else{
             displayNameAttributes[NSForegroundColorAttributeName] = hexStringToUIColor(hex:message.color)
         }
-        let displayNameString = NSMutableAttributedString(string: message.displayname, attributes: displayNameAttributes)
+        let displayNameString = NSAttributedString(string: message.displayname.isEmpty ? message.username : message.displayname, attributes: displayNameAttributes)
         finalString.append(displayNameString)
         finalString.append(NSAttributedString(string: ": "))
         
@@ -239,14 +215,4 @@ class MessageController: NSObject {
         
         return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
     }
-    
-    //        if displayName == "" {
-    //            if let startIndex = userType.indexOfCharacter(char: ":"), let endIndex = userType.indexOfCharacter(char: "!"){
-    //                let start = userType.index(userType.startIndex, offsetBy: 1 + startIndex)
-    //                let end = userType.index(userType.startIndex, offsetBy: endIndex)
-    //                let range = start..<end
-    //                displayName = userType.substring(with: range)
-    //            }
-    //        }
-
 }

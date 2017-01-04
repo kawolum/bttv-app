@@ -178,15 +178,16 @@ class EmoteController: NSObject {
     
     func checkEmotes(message: Message){
         let differentEmotes = message.emoteString.components(separatedBy: "/").filter{!$0.isEmpty}
+        //var lines = string.components(separatedBy: NSCharacterSet.newlines).filter{!$0.isEmpty}
+        
+        
         
         for emote in differentEmotes {
-            let emoteIDPositions = emote.components(separatedBy: ":")
-            let emoteID = emoteIDPositions[0]
-            let emotePositions = emoteIDPositions[1].components(separatedBy: ",")
+            let emoteIDIndexs = emote.components(separatedBy: CharacterSet(charactersIn: ":-,")).filter{!$0.isEmpty}
+            let emoteID = emoteIDIndexs[0]
             
-            for i in stride(from: 0, to: emotePositions.count, by: 1){
-                let emoteIndexes = emotePositions[i].components(separatedBy: "-")
-                if emoteIndexes.count > 1, let startIndex = Int(emoteIndexes[0]), let endIndex = Int(emoteIndexes[1]){
+            for i in stride(from: 1, to: emoteIDIndexs.count, by: 2){
+                if let startIndex = Int(emoteIDIndexs[i]), let endIndex = Int(emoteIDIndexs[i + 1]){
                     message.emotes.append(Emote(emoteID: emoteID, emoteText: "", startIndex: startIndex, length: endIndex - startIndex + 1, better: false, imageType: "png"))
                 }
             }

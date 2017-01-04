@@ -27,6 +27,7 @@
 		EC8B916D1E1AF6EC0045ECD0 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916C1E1AF6EC0045ECD0 /* Badge.swift */; };
 		EC8B916F1E1B03190045ECD0 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916E1E1B03190045ECD0 /* ImageCache.swift */; };
 		EC8B91741E1B7BE40045ECD0 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */; };
+		EC8B91771E1C29C60045ECD0 /* DisplayNameColorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91761E1C29C60045ECD0 /* DisplayNameColorCache.swift */; };
 		ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943621DCE8C1B0002E560 /* ysocket.swift */; };
 		ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */; };
 		F6E8546B1B759467E4452C8C /* Pods_BTTVCHAT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C07600C2D923AD0C2C7E33 /* Pods_BTTVCHAT.framework */; };
@@ -57,7 +58,8 @@
 		EC8B916A1E1AF0970045ECD0 /* bttvEmote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bttvEmote.swift; sourceTree = "<group>"; };
 		EC8B916C1E1AF6EC0045ECD0 /* Badge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		EC8B916E1E1B03190045ECD0 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
-		EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageTableViewCell.swift; path = ../MessageTableViewCell.swift; sourceTree = "<group>"; };
+		EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
+		EC8B91761E1C29C60045ECD0 /* DisplayNameColorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayNameColorCache.swift; sourceTree = "<group>"; };
 		ECB943621DCE8C1B0002E560 /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
 		ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ytcpsocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -173,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				EC8B916E1E1B03190045ECD0 /* ImageCache.swift */,
+				EC8B91761E1C29C60045ECD0 /* DisplayNameColorCache.swift */,
 			);
 			name = Cache;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 				EC3E49B41DD04417003509DD /* Message.swift in Sources */,
 				EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */,
 				ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */,
+				EC8B91771E1C29C60045ECD0 /* DisplayNameColorCache.swift in Sources */,
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
 				EC8B916F1E1B03190045ECD0 /* ImageCache.swift in Sources */,
 				EC89673D1DD900B200754832 /* Emote.swift in Sources */,

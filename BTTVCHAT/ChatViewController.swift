@@ -7,15 +7,11 @@
 //
 
 //to do list
-//not parse: @badges=;color=;display-name=velocitycake;emotes=3792:0-4;id=d8fb3927-9949-4144-9ff1-049d0137c34b;mod=0;room-id=24538518;sent-ts=
-//PRIVMSG did not match regular expression:
-//1483422099049;subscriber=0;tmi-sent-ts=1483425708972;turbo=0;user-id=86354680;user-type= :velocitycake!velocitycake@velocitycake.tmi.twitch.tv PRIVMSG #c9sneaky :ANELE
-//
-//no displayname
-//
+//parse sent message wip
 //gifs
-//
 //links?
+//channel id
+//loading for chat
 
 import UIKit
 
@@ -32,10 +28,11 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        sendButton.isHidden = true
         chatTableView.delegate = self
         chatTableView.dataSource = self
         configureTextField()
-        self.twitchChatClient = TwitchChatClient(channel: "meteos")
+        self.twitchChatClient = TwitchChatClient(channel: "fate_twisted_na")
         chatTableView.rowHeight = UITableViewAutomaticDimension
         chatTableView.estimatedRowHeight = 44
     }
@@ -50,9 +47,10 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func reloadTable(){
         if atBottom{
+            
             DispatchQueue.main.async {
                 self.chatTableView.reloadData()
-                self.chatTableView.scrollToRow(at: IndexPath(row: self.twitchChatClient!.messages.count - 1, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
+                self.chatTableView.scrollToRow(at: IndexPath(row: self.chatTableView.numberOfRows(inSection: 0) - 1, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
             }
         }else{
             DispatchQueue.main.async {

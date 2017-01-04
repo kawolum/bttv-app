@@ -9,12 +9,14 @@
 import UIKit
 
 class TwitchChatClient: NSObject {
-    var maxMessages = 200
+    var maxMessages = 100
     var messages = [Message]()
     
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
     var pass: String? = "oauth:3jzkmsisl13cls2529jezdrl20xqdk"
     var nick: String? = "kawolum822"
+    
+    var previousLine = ""
     
 //    let headerAcceptKey = "Accept"
 //    let headerAcceptValue = "application/vnd.twitchtv.v5+json"
@@ -72,30 +74,44 @@ class TwitchChatClient: NSObject {
     }
     
     func getLinesFromData()->[String]?{
-        let data = client.read(1024)
-        
-        if let d = data{
-            if let string = String(bytes: d, encoding: String.Encoding.utf8){
-                return string.components(separatedBy: NSCharacterSet.newlines).filter{!$0.isEmpty}
+        if let data = client.read(1024){
+            if var string = String(bytes: data, encoding: String.Encoding.utf8){
+                if !previousLine.isEmpty{
+                    string = previousLine + string
+                    previousLine = ""
+                }
+                var lines = string.components(separatedBy: NSCharacterSet.newlines).filter{!$0.isEmpty}
+                if data[data.count - 1] != 10 && data[data.count - 2] != 13{
+                    previousLine = lines[lines.count - 1]
+                    lines.removeLast()
+                }
+                return lines
             }
         }
         return nil
     }
     
-    func parseLine(line : String){
+    func parseLine(line: String){
         if line.hasPrefix("PING"){
             print("pong back")
             pongBack(line: line)
         }else {
             if(line.contains("PRIVMSG")){
                 if let message = messageController!.createMessage(line: line) {
-                    self.messages.append(message)
-                    notifyNewMessage()
+                    addMessage(message: message)
                 }
             }else{
                 print("not parse: \(line)")
             }
         }
+    }
+    
+    func addMessage(message: Message){
+        self.messages.append(message)
+        while(messages.count > maxMessages){
+            messages.removeFirst()
+        }
+        notifyNewMessage()
     }
     
     func notifyNewMessage(){
@@ -109,9 +125,14 @@ class TwitchChatClient: NSObject {
     }
     
     func sendMessage(string: String){
-        //need to parse sent message
         let line = "PRIVMSG #" + self.channel! + " :" + string + "\r\n"
         let (success,errmsg) = self.client.send(str: line)
         print((success ? "worked" : errmsg))
+        let message = Message()
+        message.displayname = nick!
+        message.username = nick!
+        message.message = string
+        messageController!.createNSAttributedString(message: message)
+        addMessage(message: message)
     }
 }
