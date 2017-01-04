@@ -32,7 +32,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         chatTableView.delegate = self
         chatTableView.dataSource = self
         configureTextField()
-        self.twitchChatClient = TwitchChatClient(channel: "fate_twisted_na")
+        self.twitchChatClient = TwitchChatClient(channel: "loltyler1")
         chatTableView.rowHeight = UITableViewAutomaticDimension
         chatTableView.estimatedRowHeight = 44
     }
@@ -47,7 +47,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func reloadTable(){
         if atBottom{
-            
             DispatchQueue.main.async {
                 self.chatTableView.reloadData()
                 self.chatTableView.scrollToRow(at: IndexPath(row: self.chatTableView.numberOfRows(inSection: 0) - 1, section: 0), at: UITableViewScrollPosition.bottom, animated: false)

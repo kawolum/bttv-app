@@ -196,7 +196,7 @@ class EmoteController: NSObject {
         var startIndex = 0
             
         for word in words{
-            if let bttvEmote = bttvEmoteDictionary[word]{
+            if let bttvEmote = bttvEmoteDictionary[word], bttvEmote.emoteType != "gif" {
                 message.emotes.append(Emote(emoteID: bttvEmote.emoteID, emoteText: word, startIndex: startIndex, length: word.characters.count, better: true, imageType: bttvEmote.emoteType))
             }
             startIndex += word.characters.count + 1
