@@ -11,16 +11,17 @@ import UIKit
 class BadgeController: NSObject {
     
     let globalBadgesAPIString = "https://badges.twitch.tv/v1/badges/global/display?language=en"
-    let channelBadgesAPIURLString = "https://badges.twitch.tv/v1/badges/channels/51496027/display?language=en"//need to replace the channel id
+    var channelBadgesAPIURLString: String?
     
     var badges = [String : Badge]()
-    var channel: String?
+    var channel: Channel?
     
     let apisema = DispatchSemaphore(value: 0)
     
-    init(channel: String){
+    init(channel: Channel){
         super.init()
         self.channel = channel
+        channelBadgesAPIURLString = "https://badges.twitch.tv/v1/badges/channels/\(channel.id)/display?language=en"
         getGlobalBadges()
         getChannelBadges()
         apisema.wait()
@@ -101,7 +102,7 @@ class BadgeController: NSObject {
     }
     
     func getChannelBadges(){
-        if let badgesAPIURL = URL(string: channelBadgesAPIURLString) {
+        if let badgesAPIURL = URL(string: channelBadgesAPIURLString!) {
             
             var request = URLRequest(url: badgesAPIURL )
             request.httpMethod = "GET"

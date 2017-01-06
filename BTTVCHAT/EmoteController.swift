@@ -10,7 +10,7 @@ import UIKit
 
 class EmoteController: NSObject {
     
-    var channel: String?
+    var channel: Channel?
     let bttvGlobalEmotesAPIString = "https://api.betterttv.net/2/emotes"
     var bttvChannelEmotesAPIString : String?
     let apisema = DispatchSemaphore(value: 0)
@@ -20,10 +20,10 @@ class EmoteController: NSObject {
     
     let emotesURL = "http://static-cdn.jtvnw.net/emoticons/v1/{{id}}/1.0"
     
-    init(channel: String){
+    init(channel: Channel){
         super.init()
         self.channel = channel
-        bttvChannelEmotesAPIString = "https://api.betterttv.net/2/channels/\(channel)"
+        bttvChannelEmotesAPIString = "https://api.betterttv.net/2/channels/\(channel.name)"
         self.getGlobalBTTVEmotesId()
         self.getChannelBTTVEmotesId()
         apisema.wait()
@@ -146,7 +146,7 @@ class EmoteController: NSObject {
                             if let dictionary = json as? [String: Any]{
                                 if let emotes = dictionary["emotes"] as? [[String:Any]]{
                                     for emote in emotes{
-                                        if let BTTVChannel = emote["channel"] as? String, BTTVChannel == self.channel! {
+                                        if let BTTVChannel = emote["channel"] as? String, BTTVChannel == self.channel!.name {
                                             if let id = emote["id"] as? String, let code = emote["code"] as? String, let imageType = emote["imageType"] as? String {
                                                 self.bttvEmoteDictionary[code] = bttvEmote(emoteID: id, emoteText: code, emoteType: imageType)
                                             }

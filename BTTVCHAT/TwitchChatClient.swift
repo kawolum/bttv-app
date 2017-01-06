@@ -9,11 +9,11 @@
 import UIKit
 
 class TwitchChatClient: NSObject {
-    var maxMessages = 100
     var messages = [Message]()
+    var maxMessages = 100;
     
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
-    var pass: String? = "oauth:3jzkmsisl13cls2529jezdrl20xqdk"
+    var pass: String? = "oauth:txhr0l264659q5jxljs4ba7ujjjy8q"
     var nick: String? = "kawolum822"
     
     var previousLine = ""
@@ -23,13 +23,12 @@ class TwitchChatClient: NSObject {
 //    let headerClientIDKey = "Client-ID"
 //    let headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
-    var channel: String?
+    var channel: Channel?
     var messageController : MessageController?
     
-    init(channel: String){
+    init(channel: Channel){
         super.init()
         self.channel = channel
-        
     }
     
     func start(){
@@ -47,8 +46,9 @@ class TwitchChatClient: NSObject {
     
     func authenticate(){
         if pass != nil && nick != nil {
-            client.send(str: "PASS " + pass! + "\r\n")
-            client.send(str: "NICK " + nick! + "\r\n")
+            client.send(str: "PASS \(pass!)\r\n")
+            client.send(str: "NICK \(nick!)\r\n")
+            
         }else{
             print("pass or nick is nil")
         }
@@ -57,7 +57,7 @@ class TwitchChatClient: NSObject {
     func joinChannel(){
         if channel != nil{
             client.send(str: "CAP REQ :twitch.tv/tags\r\n")
-            client.send(str: "JOIN #" + channel! + "\r\n")
+            client.send(str: "JOIN #\(channel!.name)\r\n")
         }else{
             print("channel is nil")
         }
@@ -108,9 +108,10 @@ class TwitchChatClient: NSObject {
     
     func addMessage(message: Message){
         self.messages.append(message)
-        while(messages.count > maxMessages){
+        if(messages.count > maxMessages){
             messages.removeFirst()
         }
+        
         notifyNewMessage()
     }
     
@@ -125,7 +126,7 @@ class TwitchChatClient: NSObject {
     }
     
     func sendMessage(string: String){
-        let line = "PRIVMSG #" + self.channel! + " :" + string + "\r\n"
+        let line = "PRIVMSG #" + channel!.name + " :" + string + "\r\n"
         let (success,errmsg) = self.client.send(str: line)
         
         let message = Message()

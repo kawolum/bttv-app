@@ -20,8 +20,9 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var chatTableView: UITableView!
+    @IBOutlet weak var chatTableView: ChatUITableView!
     
+    var channel: Channel?
     var twitchChatClient : TwitchChatClient?
     
     var atBottom = true
@@ -29,27 +30,31 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         sendButton.isHidden = true
-        chatTableView.delegate = self
-        chatTableView.dataSource = self
+        configureTableView()
         configureTextField()
-        self.twitchChatClient = TwitchChatClient(channel: "loltyler1")
-        chatTableView.rowHeight = UITableViewAutomaticDimension
-        chatTableView.estimatedRowHeight = 44
+        self.twitchChatClient = TwitchChatClient(channel: channel!)
+        LoadingIndicatorView.show(self.view)
+        gestureRecognizer()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
             self.twitchChatClient!.start()
+            DispatchQueue.main.async {
+                LoadingIndicatorView.hide()
+            }
         }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadTable), name: NSNotification.Name(rawValue: "newMessage"), object: nil)
     }
     
     func reloadTable(){
         if atBottom{
             DispatchQueue.main.async {
-                self.chatTableView.reloadData()
-                self.chatTableView.scrollToRow(at: IndexPath(row: self.chatTableView.numberOfRows(inSection: 0) - 1, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
+                self.chatTableView.reloadDataWithCompletion() {
+                    self.chatTableView.scrollToBottom()
+                }
             }
         }else{
             DispatchQueue.main.async {
@@ -58,10 +63,27 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         }
     }
     
+    func gestureRecognizer(){
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.unwindToChannels))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.right
+        self.view.addGestureRecognizer(swipeLeft)
+    }
+    
+    func unwindToChannels(){
+        self.performSegue(withIdentifier: "unwindToChannels", sender: self)
+    }
+    
     func configureTextField(){
         messageTextField.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func configureTableView(){
+        chatTableView.delegate = self
+        chatTableView.dataSource = self
+        chatTableView.rowHeight = UITableViewAutomaticDimension
+        chatTableView.estimatedRowHeight = 44
     }
     
     @IBAction func sendButtonPressed(_ sender: UIButton) {
@@ -140,4 +162,6 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             atBottom = false
         }
     }
+    
+    
 }

@@ -11,11 +11,11 @@ import UIKit
 class MessageController: NSObject {
     
     var lineRegex : NSRegularExpression? = nil
-    var channel: String?
+    var channel: Channel?
     var emoteController: EmoteController?
     var badgeController: BadgeController?
     
-    init(channel: String){
+    init(channel: Channel){
         super.init()
         self.channel = channel
         do{
