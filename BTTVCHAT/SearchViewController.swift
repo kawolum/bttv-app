@@ -46,7 +46,6 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if (searchBar.text?.characters.count)! > 0 {
             searchBar.endEditing(true)
             streamsAPIURLString = "https://api.twitch.tv/kraken/search/streams?limit=100&query=\(searchBar.text!)"
-            print(streamsAPIURLString)
             channels.removeAll()
             getStreams(){
                 DispatchQueue.main.async{
@@ -96,7 +95,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         print("getStreams: \(err?.localizedDescription)")
                     }
                     completion()
-                    }.resume()
+                }.resume()
             }
         }
     }

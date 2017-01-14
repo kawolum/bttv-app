@@ -35,6 +35,6 @@ class SlideLeftAnimationController: NSObject, UIViewControllerAnimatedTransition
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 1
+        return 0.5
     }
 }

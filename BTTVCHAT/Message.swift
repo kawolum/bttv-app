@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Message{
+class Message: NSObject {
     var badges = [String]()
     var color = ""
     var displayname = ""
@@ -17,5 +17,6 @@ class Message{
     var username = ""
     var message = ""
     var nsAttributedString = NSMutableAttributedString()
+    var dynamicHeight = CGFloat(23.5)
 }
 

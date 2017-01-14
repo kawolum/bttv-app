@@ -6,7 +6,9 @@
 //  Copyright © 2017 Ka Lum. All rights reserved.
 //
 
-class Emote{
+import UIKit
+
+class Emote: NSObject {
     var id: String
     var text: String
     var better: Bool

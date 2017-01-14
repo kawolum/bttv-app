@@ -10,8 +10,6 @@ import UIKit
 
 class TwitchChatClient: NSObject {
     var messages = [Message]()
-    var maxMessages = 200;
-    var currIndex = 0;
     
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
     var nick: String? = "kawolum822"
@@ -25,11 +23,10 @@ class TwitchChatClient: NSObject {
     
     func setChannel(channel: Channel){
         self.channel = channel
-        messages.reserveCapacity(maxMessages)
+        
     }
     
     func start(){
-        print("start")
         let (success,errmsg) = self.client.connect(timeout: 10)
         on = success
         if success{
@@ -49,8 +46,8 @@ class TwitchChatClient: NSObject {
     
     func authenticate(){
         if nick != nil {
-            var (success,errmsg) = client.send(str: "PASS oauth:\(TwitchAPIManager.sharedInstance.oAuthToken!)\r\n")
-            (success,errmsg) = client.send(str: "NICK \(nick!)\r\n")
+            client.send(str: "PASS oauth:\(TwitchAPIManager.sharedInstance.oAuthToken!)\r\n")
+            client.send(str: "NICK \(nick!)\r\n")
             
         }else{
             print("pass or nick is nil")
@@ -59,8 +56,9 @@ class TwitchChatClient: NSObject {
     
     func joinChannel(){
         if channel != nil{
-            var (success,errmsg) = client.send(str: "CAP REQ :twitch.tv/tags\r\n")
-            (success,errmsg) = client.send(str: "JOIN #\(channel!.name)\r\n")
+            client.send(str: "CAP REQ :twitch.tv/tags\r\n")
+            client.send(str: "JOIN #\(channel!.name)\r\n")
+            //client.send(str: "JOIN #kawolum822\r\n")
         }else{
             print("channel is nil")
         }
@@ -109,13 +107,15 @@ class TwitchChatClient: NSObject {
     }
     
     func addMessage(message: Message){
-        if messages.count < maxMessages{
-            self.messages.append(message)
-        }else{
-            messages[currIndex] = message;
-            currIndex = (currIndex + 1) % maxMessages;
-        }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newMessage"), object: nil)
+        self.messages.append(message)
+    }
+    
+    func getMessages() -> [Message]{
+        let newMessages = messages
+        
+        messages.removeFirst(newMessages.count)
+        
+        return newMessages
     }
     
     func pongBack(line: String){
@@ -126,7 +126,7 @@ class TwitchChatClient: NSObject {
     
     func sendMessage(string: String){
         let line = "PRIVMSG #" + channel!.name + " :" + string + "\r\n"
-        let (success,errmsg) = self.client.send(str: line)
+        self.client.send(str: line)
         
         let message = Message()
         message.displayname = nick!
@@ -137,26 +137,6 @@ class TwitchChatClient: NSObject {
     }
     
     deinit {
-        print("chatclientdeinit")
-    }
-}
-
-extension TwitchChatClient: UITableViewDataSource{
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
-        
-        let index = (indexPath.row + currIndex) % maxMessages
-        
-        cell.messageLabel.attributedText = messages[index].nsAttributedString
-        
-        return cell
+        print("deinitchatclient")
     }
 }

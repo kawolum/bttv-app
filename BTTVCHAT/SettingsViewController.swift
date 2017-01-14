@@ -23,6 +23,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func buttonPressed(_ sender: Any) {
         print(TwitchAPIManager.sharedInstance.oAuthToken)
+        TwitchAPIManager.sharedInstance.oAuthToken = nil
     }
 
 }

@@ -10,32 +10,33 @@
 //parse sent message wip
 //gifs
 //links?
-//chat doest start at the top
 
 import UIKit
+import Foundation
 
 class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate{
     @IBOutlet weak var mainStackView: UIStackView!
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var chatTableView: ChatUITableView!
+    @IBOutlet weak var chatTableView: UITableView!
     
     var channel: Channel?
     var twitchChatClient : TwitchChatClient = TwitchChatClient()
     
+    var messages = [Message]()
+    var maxMessages = 10
+    
+    var timer: Timer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         sendButton.isHidden = true
         configureTableView()
         configureTextField()
         self.twitchChatClient.setChannel(channel: self.channel!)
         LoadingIndicatorView.show(self.view)
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
             self.twitchChatClient.start()
             DispatchQueue.main.async {
@@ -43,23 +44,56 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             }
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadTable), name: NSNotification.Name(rawValue: "newMessage"), object: nil)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTable), userInfo: nil, repeats: true)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         twitchChatClient.stop()
     }
     
-    func reloadTable(){
-        chatTableView.startSticktoBottom()
-        DispatchQueue.main.async {
-            self.chatTableView.reloadData()
+    func updateTable(){
+        removeOldMessages()
+        addNewMessages()
+    }
+    
+    func removeOldMessages(){
+        let messagesToRemove = messages.count - maxMessages
+        if messagesToRemove > 0{
+            var indexPaths = [IndexPath]()
+            DispatchQueue.main.async {
+                self.chatTableView.beginUpdates()
+                self.messages.removeFirst(messagesToRemove)
+                for i in 0..<messagesToRemove{
+                    indexPaths.append(IndexPath(row: i, section: 0))
+                }
+                self.chatTableView.deleteRows(at: indexPaths, with: UITableViewRowAnimation.top)
+                self.chatTableView.endUpdates()
+            }
+        }
+    }
+    
+    func addNewMessages(){
+        let newMessages = twitchChatClient.getMessages()
+        if newMessages.count > 0{
+            var indexPaths = [IndexPath]()
+            DispatchQueue.main.async {
+                self.chatTableView.beginUpdates()
+                for message in newMessages {
+                    indexPaths.append(IndexPath(row: self.messages.count, section: 0))
+                    self.messages.append(message)
+                }
+                self.chatTableView.insertRows(at: indexPaths, with: UITableViewRowAnimation.bottom)
+                self.chatTableView.endUpdates()
+                //self.chatTableView.scrollToRow(at: indexPaths.last!, at: .bottom, animated: false)
+            }
+            
         }
     }
     
     func stop(){
         self.twitchChatClient.stop()
+        self.timer?.invalidate()
     }
     
     func configureTextField(){
@@ -70,9 +104,9 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func configureTableView(){
         chatTableView.delegate = self
-        chatTableView.dataSource = twitchChatClient
+        chatTableView.dataSource = self
         chatTableView.rowHeight = UITableViewAutomaticDimension
-        chatTableView.estimatedRowHeight = 44
+        chatTableView.estimatedRowHeight = 23.5
     }
     
     @IBAction func sendButtonPressed(_ sender: UIButton) {
@@ -114,23 +148,38 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
         
         self.bottomConstraint.constant = 0
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let index = indexPath.row
+        messages[index].dynamicHeight = cell.frame.size.height
+    }
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        let index = indexPath.row
+        return messages[index].dynamicHeight
+    }
+    
+    deinit {
+        print("chatviewcontrollerdeinit")
+    }
+}
 
+extension ChatViewController: UITableViewDataSource{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        chatTableView.atBottom = false
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
         
-        let currentOffset = scrollView.contentOffset.y
-        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        let index = indexPath.row
         
-        if maximumOffset - currentOffset <= 30.0 {
-            chatTableView.atBottom = true
-        }else{
-            chatTableView.atBottom = false
-        }
+        cell.messageLabel.attributedText = messages[index].nsAttributedString
+        
+        return cell
     }
 }

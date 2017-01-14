@@ -19,8 +19,8 @@ class LoginViewController: UIViewController {
         }
     }
     @IBAction func buttonPressed(_ sender: Any) {
-        TwitchAPIManager.sharedInstance.startOAuth2Login(){ (error) -> Void in
-            if error != nil{
+        TwitchAPIManager.sharedInstance.startOAuth2Login(){ error in
+            if error == nil{
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "loginSegue", sender: self)
                 }

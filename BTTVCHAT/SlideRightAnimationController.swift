@@ -35,6 +35,6 @@ class SlideRightAnimationController: NSObject, UIViewControllerAnimatedTransitio
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 1
+        return 0.5
     }
 }

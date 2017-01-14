@@ -68,6 +68,7 @@ class TwitchAPIManager{
     }
     
     func processOAuthResponse(url: URL){
+        print(url)
         if let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false) {
             if let fragments = components.fragment{
                 let pairs = fragments.components(separatedBy: "&")
