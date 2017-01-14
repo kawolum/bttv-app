@@ -7,11 +7,11 @@
 //
 
 class Badge{
-    var badgeName = ""
-    var badgeURLString = ""
+    var name = ""
+    var urlString = ""
     
-    init(badgeName: String, badgeURLString: String){
-        self.badgeName = badgeName
-        self.badgeURLString = badgeURLString
+    init(name: String, urlString: String){
+        self.name = name
+        self.urlString = urlString
     }
 }

@@ -13,7 +13,7 @@ class Message{
     var color = ""
     var displayname = ""
     var emoteString = ""
-    var emotes = [Emote]()
+    var messageEmotes = [MessageEmote]()
     var username = ""
     var message = ""
     var nsAttributedString = NSMutableAttributedString()

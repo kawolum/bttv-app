@@ -1,25 +1,21 @@
 //
-//  Emote.swift
+//  bttvEmote.swift
 //  BTTVCHAT
 //
-//  Created by Ka Lum on 11/13/16.
-//  Copyright © 2016 Ka Lum. All rights reserved.
+//  Created by Ka Lum on 1/2/17.
+//  Copyright © 2017 Ka Lum. All rights reserved.
 //
 
 class Emote{
-    var emoteID: String
-    var emoteText: String
-    var startIndex: Int
-    var length: Int
-    var better = false
-    var imageType: String
+    var id: String
+    var text: String
+    var better: Bool
+    var type: String
     
-    init(emoteID: String, emoteText: String, startIndex: Int, length: Int, better: Bool, imageType: String){
-        self.emoteID = emoteID
-        self.emoteText = emoteText
-        self.startIndex = startIndex
-        self.length = length
+    init(id: String, text: String, better: Bool, type: String){
+        self.id = id
+        self.text = text
         self.better = better
-        self.imageType = imageType
+        self.type = type
     }
 }

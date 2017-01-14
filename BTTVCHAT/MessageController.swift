@@ -19,7 +19,7 @@ class MessageController: NSObject {
         super.init()
         self.channel = channel
         do{
-            self.lineRegex = try NSRegularExpression(pattern: "^@(badges)=(.*);(?:(bits)=(.*);)?(color)=(.*);(display-name)=(.*);(emotes)=(.*);id=.*;mod=[01]{1};room-id=[a-zA-Z0-9]*;(?:sent-ts=.*;)?subscriber=[01]{1};(?:tmi-sent-ts=.*)?;turbo=[01]{1};user-id=.*;user-type=.* (:)(.*)!.*@.*(PRIVMSG) #.* :(.*)$")
+            self.lineRegex = try NSRegularExpression(pattern: "^@(badges)=(.*);(?:bits=.*;)?(color)=(.*);(display-name)=(.*);(emotes)=(.*);id=.*;mod=[01]{1};room-id=[a-zA-Z0-9]*;(?:sent-ts=.*;)?subscriber=[01]{1};(?:tmi-sent-ts=.*)?;turbo=[01]{1};user-id=.*;user-type=.* (:)(.*)!.*@.*(PRIVMSG) #.* :(.*)$")
         }catch{
             print("regular expression error")
         }
@@ -78,9 +78,6 @@ class MessageController: NSObject {
                 case "badges":
                     message.badges = value.components(separatedBy: ",").filter{!$0.isEmpty}
                     break;
-//                case "bits":
-//                    message.bits = value
-//                    break;
                 case "color":
                     message.color = value
                     break;
@@ -151,13 +148,13 @@ class MessageController: NSObject {
             if skip > 0{
                 skip -= 1
             }else{
-                if message.emotes.count > currentEmotesIndex, currentIndex == message.emotes[currentEmotesIndex].startIndex{
+                if message.messageEmotes.count > currentEmotesIndex, currentIndex == message.messageEmotes[currentEmotesIndex].startIndex{
                     if !currentString.isEmpty{
                         finalString.append(NSAttributedString(string: currentString))
                         currentString = ""
                     }
                     
-                    if let emoteImage = emoteController!.getEmoteImage(emote: message.emotes[currentEmotesIndex]){
+                    if let emoteImage = emoteController!.getEmoteImage(emote: message.messageEmotes[currentEmotesIndex]){
                         let emoteAttachment = NSTextAttachment()
                         emoteAttachment.image = emoteImage
                         
@@ -165,7 +162,7 @@ class MessageController: NSObject {
                         
                         finalString.append(emoteString)
                     }
-                    skip = message.emotes[currentEmotesIndex].length - 1
+                    skip = message.messageEmotes[currentEmotesIndex].length - 1
                     currentEmotesIndex += 1
                 }else{
                     currentString.append(message.message[index])

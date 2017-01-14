@@ -16,11 +16,25 @@
 		EC1093381E1E4BFB0016858A /* ChatUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093371E1E4BFB0016858A /* ChatUITableView.swift */; };
 		EC10933D1E1ED6450016858A /* ChannelUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC10933C1E1ED6450016858A /* ChannelUITableViewCell.swift */; };
 		EC1093421E1F3B020016858A /* video-player-7.png in Resources */ = {isa = PBXBuildFile; fileRef = EC1093411E1F3B020016858A /* video-player-7.png */; };
-		EC1093441E1F4EFA0016858A /* UIStoryboardSegueFromRight.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093431E1F4EFA0016858A /* UIStoryboardSegueFromRight.swift */; };
+		EC1093461E20A71B0016858A /* heart-7.png in Resources */ = {isa = PBXBuildFile; fileRef = EC1093451E20A71B0016858A /* heart-7.png */; };
+		EC1093481E20A7300016858A /* search-7.png in Resources */ = {isa = PBXBuildFile; fileRef = EC1093471E20A7300016858A /* search-7.png */; };
+		EC10934A1E20A76A0016858A /* gear-7.png in Resources */ = {isa = PBXBuildFile; fileRef = EC1093491E20A76A0016858A /* gear-7.png */; };
+		EC10934C1E20AFE20016858A /* FollowingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC10934B1E20AFE20016858A /* FollowingTableViewController.swift */; };
+		EC10934E1E20BD1F0016858A /* TwitchAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC10934D1E20BD1F0016858A /* TwitchAPIManager.swift */; };
+		EC1093521E20C3C00016858A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093511E20C3C00016858A /* SettingsViewController.swift */; };
+		EC1093541E20DDBC0016858A /* Locksmith.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC1093531E20DDBC0016858A /* Locksmith.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		EC1093571E20E6AE0016858A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093561E20E6AE0016858A /* LoginViewController.swift */; };
+		EC1093591E21A9FD0016858A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093581E21A9FD0016858A /* SearchViewController.swift */; };
+		EC10935D1E28BC6D0016858A /* SlideLeftAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC10935C1E28BC6D0016858A /* SlideLeftAnimationController.swift */; };
+		EC1093621E296B2B0016858A /* SlideRightAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093611E296B2B0016858A /* SlideRightAnimationController.swift */; };
+		EC1093651E2970F40016858A /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093641E2970F40016858A /* SwipeInteractionController.swift */; };
+		EC1093681E29AFCD0016858A /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093671E29AFCD0016858A /* Trie.swift */; };
+		EC10936A1E29AFE00016858A /* TrieNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093691E29AFE00016858A /* TrieNode.swift */; };
 		EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */; };
 		EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */; };
 		EC3E49B41DD04417003509DD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3E49B31DD04417003509DD /* Message.swift */; };
-		EC89673D1DD900B200754832 /* Emote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673C1DD900B200754832 /* Emote.swift */; };
+		EC57CED61E2A1D3C0029B5CC /* placeHolder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EC57CED51E2A1D3C0029B5CC /* placeHolder.jpg */; };
+		EC89673D1DD900B200754832 /* MessageEmote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673C1DD900B200754832 /* MessageEmote.swift */; };
 		EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673E1DDC180A00754832 /* NSRangeExtension.swift */; };
 		EC8967431DDC2D8300754832 /* ChannelsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */; };
 		EC8967451DDC2EC900754832 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967441DDC2EC900754832 /* Channel.swift */; };
@@ -28,7 +42,7 @@
 		EC8B91631E07A9370045ECD0 /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91621E07A9370045ECD0 /* MessageController.swift */; };
 		EC8B91651E19CCCC0045ECD0 /* BadgeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91641E19CCCC0045ECD0 /* BadgeController.swift */; };
 		EC8B91691E1AEE700045ECD0 /* EmoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91681E1AEE700045ECD0 /* EmoteController.swift */; };
-		EC8B916B1E1AF0970045ECD0 /* bttvEmote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916A1E1AF0970045ECD0 /* bttvEmote.swift */; };
+		EC8B916B1E1AF0970045ECD0 /* Emote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916A1E1AF0970045ECD0 /* Emote.swift */; };
 		EC8B916D1E1AF6EC0045ECD0 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916C1E1AF6EC0045ECD0 /* Badge.swift */; };
 		EC8B916F1E1B03190045ECD0 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916E1E1B03190045ECD0 /* ImageCache.swift */; };
 		EC8B91741E1B7BE40045ECD0 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */; };
@@ -53,11 +67,25 @@
 		EC1093371E1E4BFB0016858A /* ChatUITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatUITableView.swift; sourceTree = "<group>"; };
 		EC10933C1E1ED6450016858A /* ChannelUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelUITableViewCell.swift; sourceTree = "<group>"; };
 		EC1093411E1F3B020016858A /* video-player-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video-player-7.png"; sourceTree = "<group>"; };
-		EC1093431E1F4EFA0016858A /* UIStoryboardSegueFromRight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStoryboardSegueFromRight.swift; sourceTree = "<group>"; };
+		EC1093451E20A71B0016858A /* heart-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart-7.png"; sourceTree = "<group>"; };
+		EC1093471E20A7300016858A /* search-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search-7.png"; sourceTree = "<group>"; };
+		EC1093491E20A76A0016858A /* gear-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear-7.png"; sourceTree = "<group>"; };
+		EC10934B1E20AFE20016858A /* FollowingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowingTableViewController.swift; sourceTree = "<group>"; };
+		EC10934D1E20BD1F0016858A /* TwitchAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitchAPIManager.swift; sourceTree = "<group>"; };
+		EC1093511E20C3C00016858A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		EC1093531E20DDBC0016858A /* Locksmith.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Locksmith.framework; path = "../../Library/Developer/Xcode/DerivedData/BTTVCHAT-gptkzsorgihbcmaqagzefvwislyb/Build/Products/Debug-iphonesimulator/Locksmith/Locksmith.framework"; sourceTree = "<group>"; };
+		EC1093561E20E6AE0016858A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		EC1093581E21A9FD0016858A /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		EC10935C1E28BC6D0016858A /* SlideLeftAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideLeftAnimationController.swift; sourceTree = "<group>"; };
+		EC1093611E296B2B0016858A /* SlideRightAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideRightAnimationController.swift; sourceTree = "<group>"; };
+		EC1093641E2970F40016858A /* SwipeInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeInteractionController.swift; path = InteractionController/SwipeInteractionController.swift; sourceTree = "<group>"; };
+		EC1093671E29AFCD0016858A /* Trie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Trie.swift; path = Trie/Trie.swift; sourceTree = "<group>"; };
+		EC1093691E29AFE00016858A /* TrieNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrieNode.swift; sourceTree = "<group>"; };
 		EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ytcpsocket.c; sourceTree = "<group>"; };
 		EC3E49B31DD04417003509DD /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		EC89673C1DD900B200754832 /* Emote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emote.swift; sourceTree = "<group>"; };
+		EC57CED51E2A1D3C0029B5CC /* placeHolder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placeHolder.jpg; sourceTree = "<group>"; };
+		EC89673C1DD900B200754832 /* MessageEmote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageEmote.swift; sourceTree = "<group>"; };
 		EC89673E1DDC180A00754832 /* NSRangeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRangeExtension.swift; sourceTree = "<group>"; };
 		EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsTableViewController.swift; sourceTree = "<group>"; };
 		EC8967441DDC2EC900754832 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
@@ -65,7 +93,7 @@
 		EC8B91621E07A9370045ECD0 /* MessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageController.swift; sourceTree = "<group>"; };
 		EC8B91641E19CCCC0045ECD0 /* BadgeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadgeController.swift; sourceTree = "<group>"; };
 		EC8B91681E1AEE700045ECD0 /* EmoteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmoteController.swift; sourceTree = "<group>"; };
-		EC8B916A1E1AF0970045ECD0 /* bttvEmote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bttvEmote.swift; sourceTree = "<group>"; };
+		EC8B916A1E1AF0970045ECD0 /* Emote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emote.swift; sourceTree = "<group>"; };
 		EC8B916C1E1AF6EC0045ECD0 /* Badge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
 		EC8B916E1E1B03190045ECD0 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
@@ -79,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC1093541E20DDBC0016858A /* Locksmith.framework in Frameworks */,
 				F6E8546B1B759467E4452C8C /* Pods_BTTVCHAT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,6 +127,7 @@
 		700D759D827673C1CC575175 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EC1093531E20DDBC0016858A /* Locksmith.framework */,
 				60C07600C2D923AD0C2C7E33 /* Pods_BTTVCHAT.framework */,
 			);
 			name = Frameworks;
@@ -124,6 +154,7 @@
 		EC1019851DCC283F00215E78 /* BTTVCHAT */ = {
 			isa = PBXGroup;
 			children = (
+				EC1093661E29AF8C0016858A /* Trie */,
 				EC10933B1E1ED5DF0016858A /* images */,
 				EC8B91751E1B7EC40045ECD0 /* AppDelegate */,
 				EC8B91721E1B64CB0045ECD0 /* Client */,
@@ -132,6 +163,8 @@
 				EC8B915F1DFD108F0045ECD0 /* Object */,
 				EC8B915E1DFD107D0045ECD0 /* ViewController */,
 				EC10933E1E1ED6590016858A /* View */,
+				EC1093631E2970AF0016858A /* InteractionController */,
+				EC1093601E296B0C0016858A /* AnimationController */,
 				EC8B915D1DFD10630045ECD0 /* Extension */,
 				ECB9436C1DCF68920002E560 /* SwiftSocket */,
 				EC10198A1DCC283F00215E78 /* Main.storyboard */,
@@ -145,7 +178,11 @@
 		EC10933B1E1ED5DF0016858A /* images */ = {
 			isa = PBXGroup;
 			children = (
+				EC57CED51E2A1D3C0029B5CC /* placeHolder.jpg */,
 				EC1093411E1F3B020016858A /* video-player-7.png */,
+				EC1093451E20A71B0016858A /* heart-7.png */,
+				EC1093471E20A7300016858A /* search-7.png */,
+				EC1093491E20A76A0016858A /* gear-7.png */,
 			);
 			name = images;
 			sourceTree = "<group>";
@@ -153,13 +190,38 @@
 		EC10933E1E1ED6590016858A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EC1093371E1E4BFB0016858A /* ChatUITableView.swift */,
 				EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */,
 				EC10933C1E1ED6450016858A /* ChannelUITableViewCell.swift */,
 				EC1093351E1E3E7A0016858A /* LoadingIndicatorView.swift */,
-				EC1093371E1E4BFB0016858A /* ChatUITableView.swift */,
-				EC1093431E1F4EFA0016858A /* UIStoryboardSegueFromRight.swift */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		EC1093601E296B0C0016858A /* AnimationController */ = {
+			isa = PBXGroup;
+			children = (
+				EC10935C1E28BC6D0016858A /* SlideLeftAnimationController.swift */,
+				EC1093611E296B2B0016858A /* SlideRightAnimationController.swift */,
+			);
+			name = AnimationController;
+			sourceTree = "<group>";
+		};
+		EC1093631E2970AF0016858A /* InteractionController */ = {
+			isa = PBXGroup;
+			children = (
+				EC1093641E2970F40016858A /* SwipeInteractionController.swift */,
+			);
+			name = InteractionController;
+			sourceTree = "<group>";
+		};
+		EC1093661E29AF8C0016858A /* Trie */ = {
+			isa = PBXGroup;
+			children = (
+				EC1093671E29AFCD0016858A /* Trie.swift */,
+				EC1093691E29AFE00016858A /* TrieNode.swift */,
+			);
+			name = Trie;
 			sourceTree = "<group>";
 		};
 		EC8B915D1DFD10630045ECD0 /* Extension */ = {
@@ -175,7 +237,11 @@
 			isa = PBXGroup;
 			children = (
 				EC1019881DCC283F00215E78 /* ChatViewController.swift */,
+				EC1093561E20E6AE0016858A /* LoginViewController.swift */,
 				EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */,
+				EC10934B1E20AFE20016858A /* FollowingTableViewController.swift */,
+				EC1093511E20C3C00016858A /* SettingsViewController.swift */,
+				EC1093581E21A9FD0016858A /* SearchViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -183,8 +249,8 @@
 		EC8B915F1DFD108F0045ECD0 /* Object */ = {
 			isa = PBXGroup;
 			children = (
-				EC89673C1DD900B200754832 /* Emote.swift */,
-				EC8B916A1E1AF0970045ECD0 /* bttvEmote.swift */,
+				EC89673C1DD900B200754832 /* MessageEmote.swift */,
+				EC8B916A1E1AF0970045ECD0 /* Emote.swift */,
 				EC8B916C1E1AF6EC0045ECD0 /* Badge.swift */,
 				EC3E49B31DD04417003509DD /* Message.swift */,
 				EC8967441DDC2EC900754832 /* Channel.swift */,
@@ -198,6 +264,7 @@
 				EC8B91621E07A9370045ECD0 /* MessageController.swift */,
 				EC8B91681E1AEE700045ECD0 /* EmoteController.swift */,
 				EC8B91641E19CCCC0045ECD0 /* BadgeController.swift */,
+				EC10934D1E20BD1F0016858A /* TwitchAPIManager.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -275,6 +342,11 @@
 						DevelopmentTeam = TZ7S8W8D85;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -302,9 +374,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC1019911DCC283F00215E78 /* LaunchScreen.storyboard in Resources */,
+				EC1093481E20A7300016858A /* search-7.png in Resources */,
+				EC1093461E20A71B0016858A /* heart-7.png in Resources */,
 				EC10198E1DCC283F00215E78 /* Assets.xcassets in Resources */,
 				EC1093421E1F3B020016858A /* video-player-7.png in Resources */,
 				EC10198C1DCC283F00215E78 /* Main.storyboard in Resources */,
+				EC57CED61E2A1D3C0029B5CC /* placeHolder.jpg in Resources */,
+				EC10934A1E20A76A0016858A /* gear-7.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,29 +440,38 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC8967451DDC2EC900754832 /* Channel.swift in Sources */,
+				EC10936A1E29AFE00016858A /* TrieNode.swift in Sources */,
 				EC8B916D1E1AF6EC0045ECD0 /* Badge.swift in Sources */,
 				ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */,
 				EC8B91691E1AEE700045ECD0 /* EmoteController.swift in Sources */,
 				EC8B91741E1B7BE40045ECD0 /* MessageTableViewCell.swift in Sources */,
 				EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */,
-				EC8B916B1E1AF0970045ECD0 /* bttvEmote.swift in Sources */,
+				EC8B916B1E1AF0970045ECD0 /* Emote.swift in Sources */,
 				EC1019891DCC283F00215E78 /* ChatViewController.swift in Sources */,
+				EC10934C1E20AFE20016858A /* FollowingTableViewController.swift in Sources */,
 				EC8967431DDC2D8300754832 /* ChannelsTableViewController.swift in Sources */,
 				EC3E49B41DD04417003509DD /* Message.swift in Sources */,
+				EC1093651E2970F40016858A /* SwipeInteractionController.swift in Sources */,
+				EC10934E1E20BD1F0016858A /* TwitchAPIManager.swift in Sources */,
 				EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */,
 				EC1093381E1E4BFB0016858A /* ChatUITableView.swift in Sources */,
 				ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */,
+				EC1093571E20E6AE0016858A /* LoginViewController.swift in Sources */,
 				EC8B91771E1C29C60045ECD0 /* DisplayNameColorCache.swift in Sources */,
 				EC10933D1E1ED6450016858A /* ChannelUITableViewCell.swift in Sources */,
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
+				EC1093621E296B2B0016858A /* SlideRightAnimationController.swift in Sources */,
 				EC8B916F1E1B03190045ECD0 /* ImageCache.swift in Sources */,
-				EC89673D1DD900B200754832 /* Emote.swift in Sources */,
-				EC1093441E1F4EFA0016858A /* UIStoryboardSegueFromRight.swift in Sources */,
+				EC89673D1DD900B200754832 /* MessageEmote.swift in Sources */,
 				EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */,
 				EC8B91631E07A9370045ECD0 /* MessageController.swift in Sources */,
+				EC1093681E29AFCD0016858A /* Trie.swift in Sources */,
 				EC1093361E1E3E7A0016858A /* LoadingIndicatorView.swift in Sources */,
 				EC8B91611DFD10CB0045ECD0 /* TwitchChatClient.swift in Sources */,
+				EC10935D1E28BC6D0016858A /* SlideLeftAnimationController.swift in Sources */,
 				EC8B91651E19CCCC0045ECD0 /* BadgeController.swift in Sources */,
+				EC1093521E20C3C00016858A /* SettingsViewController.swift in Sources */,
+				EC1093591E21A9FD0016858A /* SearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

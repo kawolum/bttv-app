@@ -1,22 +1,21 @@
 //
-//  ChatsTableViewController.swift
+//  SearchViewController.swift
 //  BTTVCHAT
 //
-//  Created by Ka Lum on 11/16/16.
-//  Copyright © 2016 Ka Lum. All rights reserved.
+//  Created by Ka Lum on 1/7/17.
+//  Copyright © 2017 Ka Lum. All rights reserved.
 //
 
 import UIKit
 
-class ChannelsTableViewController: UITableViewController {
-
-    var channels = [Channel]()
-    
+class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableViewBottom: NSLayoutConstraint!
     let slideRightAnimationController = SlideRightAnimationController()
     let slideLeftAnimationController = SlideLeftAnimationController()
     let swipeInteractionController = SwipeInteractionController()
-    
-    let channelsAPIURLString = "https://api.twitch.tv/kraken/streams?limit=25&stream_type=live"
+    var streamsAPIURLString = "https://api.twitch.tv/kraken/search/streams?limit=100&query="
     let headerAcceptKey = "Accept"
     let headerAcceptValue = "application/vnd.twitchtv.v5+json"
     let headerClientIDKey = "Client-ID"
@@ -24,60 +23,62 @@ class ChannelsTableViewController: UITableViewController {
     
     var selectedIndex = 0;
     
+    var channels = [Channel]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.delegate = self
+        tableView.dataSource = self
+        searchBar.delegate = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
-        getChannels(){
-            DispatchQueue.main.async{
-                self.tableView.reloadData()
-            }
-            self.downloadImages()
-        }
-        self.refreshControl?.addTarget(self, action: #selector(self.handleRefresh), for: UIControlEvents.valueChanged)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return channels.count
     }
     
-    func handleRefresh(refreshControl: UIRefreshControl) {
-        channels.removeAll()
-        getChannels(){
-            DispatchQueue.main.async{
-                self.tableView.reloadData()
-                refreshControl.endRefreshing()
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if (searchBar.text?.characters.count)! > 0 {
+            searchBar.endEditing(true)
+            streamsAPIURLString = "https://api.twitch.tv/kraken/search/streams?limit=100&query=\(searchBar.text!)"
+            print(streamsAPIURLString)
+            channels.removeAll()
+            getStreams(){
+                DispatchQueue.main.async{
+                    self.tableView.reloadData()
+                }
+                self.downloadImages()
             }
-            self.downloadImages()
         }
     }
     
-    func getChannels(completion: @escaping () -> Void){
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+    
+    func getStreams(completion: @escaping () -> Void){
         DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
-            if let streamsAPIURL = URL(string: self.channelsAPIURLString) {
             
+            if let streamsAPIURL = URL(string: self.streamsAPIURLString) {
+                
                 var request = URLRequest(url: streamsAPIURL )
                 request.httpMethod = "GET"
                 request.addValue(self.headerAcceptValue, forHTTPHeaderField: self.headerAcceptKey)
                 request.addValue(self.headerClientIDValue, forHTTPHeaderField: self.headerClientIDKey)
-            
+                request.addValue(TwitchAPIManager.sharedInstance.authorizationValue+TwitchAPIManager.sharedInstance.oAuthToken!, forHTTPHeaderField: TwitchAPIManager.sharedInstance.authorizationHeader)
+                
                 let session = URLSession.shared
-            
+                
                 session.dataTask(with: request){ data, response, err in
                     if err == nil{
                         if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
                             do {
                                 let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                            
                                 if let dictionary = json as? [String: Any], let streams = dictionary["streams"] as? [[String: Any]]{
                                     for stream in streams{
                                         if let previews = stream["preview"] as? [String: String], let preview = previews["large"], let viewers = stream["viewers"] as? Int, let game = stream["game"] as? String, let channel = stream["channel"] as? [String: Any],let id = channel["_id"] as? Int, let name = channel["name"] as? String,let status = channel["status"] as? String{
@@ -89,36 +90,15 @@ class ChannelsTableViewController: UITableViewController {
                             } catch let error as NSError {
                                 print("Failed to load: \(error.localizedDescription)")
                             }
-                        
+                            
                         }
                     }else{
                         print("getStreams: \(err?.localizedDescription)")
                     }
                     completion()
-                }.resume()
+                    }.resume()
             }
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndex = indexPath.row;
-        self.performSegue(withIdentifier: "toChat", sender: self)
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "channelCell", for: indexPath) as! ChannelUITableViewCell
-        
-        let index = indexPath.row
-        
-        cell.label1.text = "\(channels[index].name)"
-        cell.label2.text = "\(channels[index].status)"
-        cell.label3.text = "streaming \(channels[index].game) for \(channels[index].viewers) viewers"
-        
-        if let image = channels[index].previewImage{
-            cell.setPostedImage(image: image)
-        }
-        
-        return cell
     }
     
     func downloadImages(){
@@ -145,6 +125,30 @@ class ChannelsTableViewController: UITableViewController {
                 }.resume()
         }
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "channelCell", for: indexPath) as! ChannelUITableViewCell
+        
+        let index = indexPath.row
+        
+        cell.label1.text = "\(channels[index].name)"
+        cell.label2.text = "\(channels[index].status)"
+        cell.label3.text = "streaming \(channels[index].game) for \(channels[index].viewers) viewers"
+        
+        if let image = channels[index].previewImage{
+            cell.setPostedImage(image: image)
+        }
+        
+        return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedIndex = indexPath.row
+        
+        self.performSegue(withIdentifier: "toChat", sender: self)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toChat"{
             if let destinationViewController = segue.destination as? ChatViewController{
@@ -154,9 +158,10 @@ class ChannelsTableViewController: UITableViewController {
             }
         }
     }
+    
 }
 
-extension ChannelsTableViewController: UIViewControllerTransitioningDelegate {
+extension SearchViewController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return slideLeftAnimationController

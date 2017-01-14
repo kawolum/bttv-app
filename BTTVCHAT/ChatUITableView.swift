@@ -10,19 +10,25 @@ import UIKit
 
 class ChatUITableView: UITableView {
     
-    var reloadDataCompletionBlock: (() -> Void)?
+    var atBottom = true
+    var start = false
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.reloadDataCompletionBlock?()
+        if start && atBottom {
+            stickToBottom()
+        }
     }
     
-    func reloadDataWithCompletion(completion: @escaping () -> Void) {
-        reloadDataCompletionBlock = completion
-        super.reloadData()
+    func startSticktoBottom() {
+        start = true
     }
     
-    func scrollToBottom(){
-        self.scrollToRow(at: IndexPath(row: self.numberOfRows(inSection: self.numberOfSections - 1) - 1, section: self.numberOfSections - 1), at: UITableViewScrollPosition.bottom, animated: false)
+    func stickToBottom(){
+        let sec = self.numberOfSections - 1
+        let row = self.numberOfRows(inSection: sec) - 1
+        DispatchQueue.main.async {
+            super.scrollToRow(at: IndexPath(row: row, section: sec), at: UITableViewScrollPosition.bottom, animated: false)
+        }
     }
 }

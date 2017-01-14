@@ -1,22 +1,18 @@
 //
-//  ChatsTableViewController.swift
+//  FollowingTableViewController.swift
 //  BTTVCHAT
 //
-//  Created by Ka Lum on 11/16/16.
-//  Copyright © 2016 Ka Lum. All rights reserved.
+//  Created by Ka Lum on 1/6/17.
+//  Copyright © 2017 Ka Lum. All rights reserved.
 //
 
 import UIKit
 
-class ChannelsTableViewController: UITableViewController {
-
+class FollowingTableViewController: UITableViewController {
+    
     var channels = [Channel]()
     
-    let slideRightAnimationController = SlideRightAnimationController()
-    let slideLeftAnimationController = SlideLeftAnimationController()
-    let swipeInteractionController = SwipeInteractionController()
-    
-    let channelsAPIURLString = "https://api.twitch.tv/kraken/streams?limit=25&stream_type=live"
+    let streamsAPIURLString = "https://api.twitch.tv/kraken/streams/followed?limit=100&offset=0&stream_type=live"
     let headerAcceptKey = "Accept"
     let headerAcceptValue = "application/vnd.twitchtv.v5+json"
     let headerClientIDKey = "Client-ID"
@@ -26,10 +22,12 @@ class ChannelsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let topLayoutGuideLength = self.topLayoutGuide.length;
+        tableView.contentInset = UIEdgeInsetsMake(topLayoutGuideLength, 0, 0, 0);
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
-        getChannels(){
+        getStreams(){
             DispatchQueue.main.async{
                 self.tableView.reloadData()
             }
@@ -37,22 +35,22 @@ class ChannelsTableViewController: UITableViewController {
         }
         self.refreshControl?.addTarget(self, action: #selector(self.handleRefresh), for: UIControlEvents.valueChanged)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return channels.count
     }
     
     func handleRefresh(refreshControl: UIRefreshControl) {
         channels.removeAll()
-        getChannels(){
+        getStreams(){
             DispatchQueue.main.async{
                 self.tableView.reloadData()
                 refreshControl.endRefreshing()
@@ -61,23 +59,24 @@ class ChannelsTableViewController: UITableViewController {
         }
     }
     
-    func getChannels(completion: @escaping () -> Void){
+    func getStreams(completion: @escaping () -> Void){
         DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
-            if let streamsAPIURL = URL(string: self.channelsAPIURLString) {
             
+            if let streamsAPIURL = URL(string: self.streamsAPIURLString) {
+                
                 var request = URLRequest(url: streamsAPIURL )
                 request.httpMethod = "GET"
                 request.addValue(self.headerAcceptValue, forHTTPHeaderField: self.headerAcceptKey)
                 request.addValue(self.headerClientIDValue, forHTTPHeaderField: self.headerClientIDKey)
-            
+                request.addValue(TwitchAPIManager.sharedInstance.authorizationValue+TwitchAPIManager.sharedInstance.oAuthToken!, forHTTPHeaderField: TwitchAPIManager.sharedInstance.authorizationHeader)
+                
                 let session = URLSession.shared
-            
+                
                 session.dataTask(with: request){ data, response, err in
                     if err == nil{
                         if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
                             do {
                                 let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                            
                                 if let dictionary = json as? [String: Any], let streams = dictionary["streams"] as? [[String: Any]]{
                                     for stream in streams{
                                         if let previews = stream["preview"] as? [String: String], let preview = previews["large"], let viewers = stream["viewers"] as? Int, let game = stream["game"] as? String, let channel = stream["channel"] as? [String: Any],let id = channel["_id"] as? Int, let name = channel["name"] as? String,let status = channel["status"] as? String{
@@ -89,7 +88,7 @@ class ChannelsTableViewController: UITableViewController {
                             } catch let error as NSError {
                                 print("Failed to load: \(error.localizedDescription)")
                             }
-                        
+                            
                         }
                     }else{
                         print("getStreams: \(err?.localizedDescription)")
@@ -121,6 +120,10 @@ class ChannelsTableViewController: UITableViewController {
         return cell
     }
     
+    @IBAction func unwindToChannelsViewController(segue: UIStoryboardSegue) {
+        print("Unwind to channels")
+    }
+    
     func downloadImages(){
         for i in 0..<channels.count{
             downloadImage(index: i)
@@ -147,26 +150,9 @@ class ChannelsTableViewController: UITableViewController {
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toChat"{
-            if let destinationViewController = segue.destination as? ChatViewController{
-                destinationViewController.channel = channels[selectedIndex]
-                destinationViewController.transitioningDelegate = self
-                swipeInteractionController.wireToViewController(destinationViewController)
+            if let nextScene = segue.destination as? ChatViewController{
+                nextScene.channel = channels[selectedIndex]
             }
         }
-    }
-}
-
-extension ChannelsTableViewController: UIViewControllerTransitioningDelegate {
-    
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return slideLeftAnimationController
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return slideRightAnimationController
-    }
-    
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return swipeInteractionController.interactionInProgress ? swipeInteractionController : nil
     }
 }

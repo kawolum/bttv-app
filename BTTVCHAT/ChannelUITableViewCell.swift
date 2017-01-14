@@ -35,19 +35,18 @@ class ChannelUITableViewCell: UITableViewCell {
         label3.layer.shadowOffset = CGSize(width: 0, height: 0)
         label3.layer.shadowOpacity = 1
         label3.layer.shadowRadius = 10
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        aspectConstraint = nil
+        setAspectConstraint()
     }
     
     func setPostedImage(image : UIImage) {
-        
-        let aspect = image.size.width / image.size.height
-        
-        aspectConstraint = NSLayoutConstraint(item: previewImage, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: previewImage, attribute: NSLayoutAttribute.height, multiplier: aspect, constant: 0.0)
-        
         previewImage.image = image
+        setAspectConstraint()
+    }
+    
+    func setAspectConstraint(){
+        if let image = previewImage.image{
+            let aspect = image.size.width / image.size.height
+            aspectConstraint = NSLayoutConstraint(item: previewImage, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: previewImage, attribute: NSLayoutAttribute.height, multiplier: aspect, constant: 0.0)
+        }
     }
 }

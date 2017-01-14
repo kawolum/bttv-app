@@ -4,4 +4,6 @@ target 'BTTVCHAT' do
 
 use_frameworks!
 
+pod ‘Locksmith’
+
 end

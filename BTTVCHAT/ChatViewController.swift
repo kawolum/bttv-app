@@ -10,12 +10,11 @@
 //parse sent message wip
 //gifs
 //links?
-//channel id
-//loading for chat
+//chat doest start at the top
 
 import UIKit
 
-class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource{
+class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate{
     @IBOutlet weak var mainStackView: UIStackView!
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
@@ -23,24 +22,22 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     @IBOutlet weak var chatTableView: ChatUITableView!
     
     var channel: Channel?
-    var twitchChatClient : TwitchChatClient?
-    
-    var atBottom = true
+    var twitchChatClient : TwitchChatClient = TwitchChatClient()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         sendButton.isHidden = true
         configureTableView()
         configureTextField()
-        self.twitchChatClient = TwitchChatClient(channel: channel!)
+        self.twitchChatClient.setChannel(channel: self.channel!)
         LoadingIndicatorView.show(self.view)
-        gestureRecognizer()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
-            self.twitchChatClient!.start()
+            self.twitchChatClient.start()
             DispatchQueue.main.async {
                 LoadingIndicatorView.hide()
             }
@@ -49,28 +46,20 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadTable), name: NSNotification.Name(rawValue: "newMessage"), object: nil)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        twitchChatClient.stop()
+    }
+    
     func reloadTable(){
-        if atBottom{
-            DispatchQueue.main.async {
-                self.chatTableView.reloadDataWithCompletion() {
-                    self.chatTableView.scrollToBottom()
-                }
-            }
-        }else{
-            DispatchQueue.main.async {
-                self.chatTableView.reloadData()
-            }
+        chatTableView.startSticktoBottom()
+        DispatchQueue.main.async {
+            self.chatTableView.reloadData()
         }
     }
     
-    func gestureRecognizer(){
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.unwindToChannels))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.right
-        self.view.addGestureRecognizer(swipeLeft)
-    }
-    
-    func unwindToChannels(){
-        self.performSegue(withIdentifier: "unwindToChannels", sender: self)
+    func stop(){
+        self.twitchChatClient.stop()
     }
     
     func configureTextField(){
@@ -81,20 +70,19 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     
     func configureTableView(){
         chatTableView.delegate = self
-        chatTableView.dataSource = self
+        chatTableView.dataSource = twitchChatClient
         chatTableView.rowHeight = UITableViewAutomaticDimension
         chatTableView.estimatedRowHeight = 44
     }
     
     @IBAction func sendButtonPressed(_ sender: UIButton) {
-        self.chatTableView.reloadData()
         if let message = messageTextField.text{
             if(message != ""){
                 messageTextField.text = ""
                 messageTextField.endEditing(true)
                 sendButton.isHidden = true
                 DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
-                    self.twitchChatClient?.sendMessage(string: message)
+                    self.twitchChatClient.sendMessage(string: message)
                 }
             }
         }
@@ -129,26 +117,9 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
 
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return twitchChatClient!.messages.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
-        
-        let index = indexPath.row
-        
-        cell.messageLabel.attributedText = twitchChatClient!.messages[index].nsAttributedString
-        
-        return cell
-    }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        atBottom = false
+        chatTableView.atBottom = false
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -157,11 +128,9 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
         if maximumOffset - currentOffset <= 30.0 {
-            atBottom = true
+            chatTableView.atBottom = true
         }else{
-            atBottom = false
+            chatTableView.atBottom = false
         }
     }
-    
-    
 }
