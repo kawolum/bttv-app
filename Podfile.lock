@@ -1,12 +1,15 @@
 PODS:
   - Locksmith (3.0.0)
+  - SwiftyGif (3.0.0)
 
 DEPENDENCIES:
   - Locksmith
+  - SwiftyGif
 
 SPEC CHECKSUMS:
   Locksmith: 310b4cc5031af5728bf4db5d4de547a5100c6a3b
+  SwiftyGif: d6b4d63de2a2a5134d8b54ba5719837319d77ef0
 
-PODFILE CHECKSUM: bb9cf00254f82e42a0aea9c0b7109098172e5724
+PODFILE CHECKSUM: d56bf40d7a959e25abcfabf452ac6779978b2219
 
 COCOAPODS: 1.1.1

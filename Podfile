@@ -6,4 +6,8 @@ use_frameworks!
 
 pod ‘Locksmith’
 
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+pod 'SwiftyGif'
+
 end
