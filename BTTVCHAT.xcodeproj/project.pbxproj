@@ -28,6 +28,7 @@
 		EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */; };
 		EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */; };
 		EC3E49B41DD04417003509DD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3E49B31DD04417003509DD /* Message.swift */; };
+		EC4BB45D1E2E1B7F0033AF91 /* DisplayNameColorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB45C1E2E1B7F0033AF91 /* DisplayNameColorCache.swift */; };
 		EC89673D1DD900B200754832 /* MessageEmote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673C1DD900B200754832 /* MessageEmote.swift */; };
 		EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673E1DDC180A00754832 /* NSRangeExtension.swift */; };
 		EC8967431DDC2D8300754832 /* ChannelsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */; };
@@ -40,7 +41,6 @@
 		EC8B916D1E1AF6EC0045ECD0 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916C1E1AF6EC0045ECD0 /* Badge.swift */; };
 		EC8B916F1E1B03190045ECD0 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B916E1E1B03190045ECD0 /* ImageCache.swift */; };
 		EC8B91741E1B7BE40045ECD0 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */; };
-		EC8B91771E1C29C60045ECD0 /* DisplayNameColorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91761E1C29C60045ECD0 /* DisplayNameColorCache.swift */; };
 		ECB943671DCE8C1B0002E560 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943621DCE8C1B0002E560 /* ysocket.swift */; };
 		ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */; };
 		F6E8546B1B759467E4452C8C /* Pods_BTTVCHAT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C07600C2D923AD0C2C7E33 /* Pods_BTTVCHAT.framework */; };
@@ -65,14 +65,15 @@
 		EC1093531E20DDBC0016858A /* Locksmith.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Locksmith.framework; path = "../../Library/Developer/Xcode/DerivedData/BTTVCHAT-gptkzsorgihbcmaqagzefvwislyb/Build/Products/Debug-iphonesimulator/Locksmith/Locksmith.framework"; sourceTree = "<group>"; };
 		EC1093561E20E6AE0016858A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewController/LoginViewController.swift; sourceTree = "<group>"; };
 		EC1093581E21A9FD0016858A /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = ViewController/SearchViewController.swift; sourceTree = "<group>"; };
-		EC10935C1E28BC6D0016858A /* SlideLeftAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SlideLeftAnimationController.swift; path = AnimationController.swift/SlideLeftAnimationController.swift; sourceTree = "<group>"; };
-		EC1093611E296B2B0016858A /* SlideRightAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SlideRightAnimationController.swift; path = AnimationController.swift/SlideRightAnimationController.swift; sourceTree = "<group>"; };
+		EC10935C1E28BC6D0016858A /* SlideLeftAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SlideLeftAnimationController.swift; path = AnimationController/SlideLeftAnimationController.swift; sourceTree = "<group>"; };
+		EC1093611E296B2B0016858A /* SlideRightAnimationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SlideRightAnimationController.swift; path = AnimationController/SlideRightAnimationController.swift; sourceTree = "<group>"; };
 		EC1093641E2970F40016858A /* SwipeInteractionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwipeInteractionController.swift; path = InteractionController/SwipeInteractionController.swift; sourceTree = "<group>"; };
 		EC1093671E29AFCD0016858A /* Trie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Trie.swift; path = Trie/Trie.swift; sourceTree = "<group>"; };
 		EC1093691E29AFE00016858A /* TrieNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrieNode.swift; path = Trie/TrieNode.swift; sourceTree = "<group>"; };
 		EC326DDC1DD1AB24006EB9E6 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = Extension/StringExtension.swift; sourceTree = "<group>"; };
 		EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ytcpsocket.c; path = Socket/ytcpsocket.c; sourceTree = "<group>"; };
 		EC3E49B31DD04417003509DD /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Message.swift; path = Object/Message.swift; sourceTree = "<group>"; };
+		EC4BB45C1E2E1B7F0033AF91 /* DisplayNameColorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayNameColorCache.swift; path = Cache/DisplayNameColorCache.swift; sourceTree = "<group>"; };
 		EC89673C1DD900B200754832 /* MessageEmote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageEmote.swift; path = Object/MessageEmote.swift; sourceTree = "<group>"; };
 		EC89673E1DDC180A00754832 /* NSRangeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSRangeExtension.swift; path = Extension/NSRangeExtension.swift; sourceTree = "<group>"; };
 		EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsTableViewController.swift; path = ViewController/ChannelsTableViewController.swift; sourceTree = "<group>"; };
@@ -83,9 +84,8 @@
 		EC8B91681E1AEE700045ECD0 /* EmoteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmoteController.swift; path = Controller/EmoteController.swift; sourceTree = "<group>"; };
 		EC8B916A1E1AF0970045ECD0 /* Emote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Emote.swift; path = Object/Emote.swift; sourceTree = "<group>"; };
 		EC8B916C1E1AF6EC0045ECD0 /* Badge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Badge.swift; path = Object/Badge.swift; sourceTree = "<group>"; };
-		EC8B916E1E1B03190045ECD0 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageCache.swift; path = Cache.swift/ImageCache.swift; sourceTree = "<group>"; };
+		EC8B916E1E1B03190045ECD0 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageCache.swift; path = Cache/ImageCache.swift; sourceTree = "<group>"; };
 		EC8B91731E1B7BE40045ECD0 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageTableViewCell.swift; path = View/TableViewCell/MessageTableViewCell.swift; sourceTree = "<group>"; };
-		EC8B91761E1C29C60045ECD0 /* DisplayNameColorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayNameColorCache.swift; path = Cache.swift/DisplayNameColorCache.swift; sourceTree = "<group>"; };
 		ECB943621DCE8C1B0002E560 /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ysocket.swift; path = Socket/ysocket.swift; sourceTree = "<group>"; };
 		ECB943641DCE8C1B0002E560 /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ytcpsocket.swift; path = Socket/ytcpsocket.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -254,8 +254,8 @@
 		EC8B91711E1B64C70045ECD0 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
+				EC4BB45C1E2E1B7F0033AF91 /* DisplayNameColorCache.swift */,
 				EC8B916E1E1B03190045ECD0 /* ImageCache.swift */,
-				EC8B91761E1C29C60045ECD0 /* DisplayNameColorCache.swift */,
 			);
 			name = Cache;
 			sourceTree = "<group>";
@@ -416,6 +416,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC4BB45D1E2E1B7F0033AF91 /* DisplayNameColorCache.swift in Sources */,
 				EC8967451DDC2EC900754832 /* Channel.swift in Sources */,
 				EC10936A1E29AFE00016858A /* TrieNode.swift in Sources */,
 				EC8B916D1E1AF6EC0045ECD0 /* Badge.swift in Sources */,
@@ -433,7 +434,6 @@
 				EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */,
 				ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */,
 				EC1093571E20E6AE0016858A /* LoginViewController.swift in Sources */,
-				EC8B91771E1C29C60045ECD0 /* DisplayNameColorCache.swift in Sources */,
 				EC10933D1E1ED6450016858A /* ChannelTableViewCell.swift in Sources */,
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
 				EC1093621E296B2B0016858A /* SlideRightAnimationController.swift in Sources */,
