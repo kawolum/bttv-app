@@ -25,7 +25,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     var twitchChatClient : TwitchChatClient = TwitchChatClient()
     
     var messages = [Message]()
-    var maxMessages = 10
+    var maxMessages = 100
     
     var timer: Timer?
     
@@ -44,7 +44,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
             }
         }
         
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTable), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.8, target: self, selector: #selector(self.updateTable), userInfo: nil, repeats: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,8 +53,10 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
     }
     
     func updateTable(){
+        self.chatTableView.beginUpdates()
         removeOldMessages()
         addNewMessages()
+        self.chatTableView.endUpdates()
     }
     
     func removeOldMessages(){
@@ -62,13 +64,11 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         if messagesToRemove > 0{
             var indexPaths = [IndexPath]()
             DispatchQueue.main.async {
-                self.chatTableView.beginUpdates()
                 self.messages.removeFirst(messagesToRemove)
                 for i in 0..<messagesToRemove{
                     indexPaths.append(IndexPath(row: i, section: 0))
                 }
-                self.chatTableView.deleteRows(at: indexPaths, with: UITableViewRowAnimation.top)
-                self.chatTableView.endUpdates()
+                self.chatTableView.deleteRows(at: indexPaths, with: UITableViewRowAnimation.none)
             }
         }
     }
@@ -78,16 +78,13 @@ class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDele
         if newMessages.count > 0{
             var indexPaths = [IndexPath]()
             DispatchQueue.main.async {
-                self.chatTableView.beginUpdates()
                 for message in newMessages {
                     indexPaths.append(IndexPath(row: self.messages.count, section: 0))
                     self.messages.append(message)
                 }
-                self.chatTableView.insertRows(at: indexPaths, with: UITableViewRowAnimation.bottom)
-                self.chatTableView.endUpdates()
-                //self.chatTableView.scrollToRow(at: indexPaths.last!, at: .bottom, animated: false)
+                self.chatTableView.insertRows(at: indexPaths, with: UITableViewRowAnimation.none)
+                self.chatTableView.scrollToRow(at: indexPaths.last!, at: .bottom, animated: false)
             }
-            
         }
     }
     

@@ -12,7 +12,7 @@ class TwitchChatClient: NSObject {
     var messages = [Message]()
     
     let client:TCPClient = TCPClient(addr: "irc.chat.twitch.tv", port: 6667)
-    var nick: String? = "kawolum822"
+    var nick: String?
     
     var previousLine = ""
     
@@ -23,7 +23,7 @@ class TwitchChatClient: NSObject {
     
     func setChannel(channel: Channel){
         self.channel = channel
-        
+        self.nick = TwitchAPIManager.sharedInstance.username!
     }
     
     func start(){
