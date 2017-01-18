@@ -14,7 +14,6 @@
 		EC1019911DCC283F00215E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC10198F1DCC283F00215E78 /* LaunchScreen.storyboard */; };
 		EC1093361E1E3E7A0016858A /* LoadingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093351E1E3E7A0016858A /* LoadingIndicatorView.swift */; };
 		EC10933D1E1ED6450016858A /* ChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC10933C1E1ED6450016858A /* ChannelTableViewCell.swift */; };
-		EC10934C1E20AFE20016858A /* FollowingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC10934B1E20AFE20016858A /* FollowingTableViewController.swift */; };
 		EC10934E1E20BD1F0016858A /* TwitchAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC10934D1E20BD1F0016858A /* TwitchAPIManager.swift */; };
 		EC1093521E20C3C00016858A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1093511E20C3C00016858A /* SettingsViewController.swift */; };
 		EC1093541E20DDBC0016858A /* Locksmith.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC1093531E20DDBC0016858A /* Locksmith.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -29,9 +28,10 @@
 		EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */; };
 		EC3E49B41DD04417003509DD /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3E49B31DD04417003509DD /* Message.swift */; };
 		EC4BB45D1E2E1B7F0033AF91 /* DisplayNameColorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB45C1E2E1B7F0033AF91 /* DisplayNameColorCache.swift */; };
+		EC4BB45F1E2EB2C00033AF91 /* ChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB45E1E2EB2C00033AF91 /* ChannelsViewController.swift */; };
+		EC4BB4611E2F14000033AF91 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB4601E2F14000033AF91 /* FollowingViewController.swift */; };
 		EC89673D1DD900B200754832 /* MessageEmote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673C1DD900B200754832 /* MessageEmote.swift */; };
 		EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673E1DDC180A00754832 /* NSRangeExtension.swift */; };
-		EC8967431DDC2D8300754832 /* ChannelsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */; };
 		EC8967451DDC2EC900754832 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967441DDC2EC900754832 /* Channel.swift */; };
 		EC8B91611DFD10CB0045ECD0 /* TwitchChatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */; };
 		EC8B91631E07A9370045ECD0 /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B91621E07A9370045ECD0 /* MessageController.swift */; };
@@ -59,7 +59,6 @@
 		EC1019921DCC283F00215E78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC1093351E1E3E7A0016858A /* LoadingIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingIndicatorView.swift; path = View/LoadingIndicatorView.swift; sourceTree = "<group>"; };
 		EC10933C1E1ED6450016858A /* ChannelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelTableViewCell.swift; path = View/TableViewCell/ChannelTableViewCell.swift; sourceTree = "<group>"; };
-		EC10934B1E20AFE20016858A /* FollowingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FollowingTableViewController.swift; path = ViewController/FollowingTableViewController.swift; sourceTree = "<group>"; };
 		EC10934D1E20BD1F0016858A /* TwitchAPIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TwitchAPIManager.swift; path = Controller/TwitchAPIManager.swift; sourceTree = "<group>"; };
 		EC1093511E20C3C00016858A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = ViewController/SettingsViewController.swift; sourceTree = "<group>"; };
 		EC1093531E20DDBC0016858A /* Locksmith.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Locksmith.framework; path = "../../Library/Developer/Xcode/DerivedData/BTTVCHAT-gptkzsorgihbcmaqagzefvwislyb/Build/Products/Debug-iphonesimulator/Locksmith/Locksmith.framework"; sourceTree = "<group>"; };
@@ -74,9 +73,10 @@
 		EC326DDE1DD404B9006EB9E6 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ytcpsocket.c; path = Socket/ytcpsocket.c; sourceTree = "<group>"; };
 		EC3E49B31DD04417003509DD /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Message.swift; path = Object/Message.swift; sourceTree = "<group>"; };
 		EC4BB45C1E2E1B7F0033AF91 /* DisplayNameColorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayNameColorCache.swift; path = Cache/DisplayNameColorCache.swift; sourceTree = "<group>"; };
+		EC4BB45E1E2EB2C00033AF91 /* ChannelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsViewController.swift; path = ViewController/ChannelsViewController.swift; sourceTree = "<group>"; };
+		EC4BB4601E2F14000033AF91 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FollowingViewController.swift; path = ViewController/FollowingViewController.swift; sourceTree = "<group>"; };
 		EC89673C1DD900B200754832 /* MessageEmote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageEmote.swift; path = Object/MessageEmote.swift; sourceTree = "<group>"; };
 		EC89673E1DDC180A00754832 /* NSRangeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSRangeExtension.swift; path = Extension/NSRangeExtension.swift; sourceTree = "<group>"; };
-		EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsTableViewController.swift; path = ViewController/ChannelsTableViewController.swift; sourceTree = "<group>"; };
 		EC8967441DDC2EC900754832 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channel.swift; path = Object/Channel.swift; sourceTree = "<group>"; };
 		EC8B91601DFD10CB0045ECD0 /* TwitchChatClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TwitchChatClient.swift; path = Client/TwitchChatClient.swift; sourceTree = "<group>"; };
 		EC8B91621E07A9370045ECD0 /* MessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageController.swift; path = Controller/MessageController.swift; sourceTree = "<group>"; };
@@ -220,10 +220,10 @@
 			children = (
 				EC1019881DCC283F00215E78 /* ChatViewController.swift */,
 				EC1093561E20E6AE0016858A /* LoginViewController.swift */,
-				EC8967421DDC2D8300754832 /* ChannelsTableViewController.swift */,
-				EC10934B1E20AFE20016858A /* FollowingTableViewController.swift */,
 				EC1093511E20C3C00016858A /* SettingsViewController.swift */,
 				EC1093581E21A9FD0016858A /* SearchViewController.swift */,
+				EC4BB45E1E2EB2C00033AF91 /* ChannelsViewController.swift */,
+				EC4BB4601E2F14000033AF91 /* FollowingViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -426,13 +426,12 @@
 				EC326DDD1DD1AB24006EB9E6 /* StringExtension.swift in Sources */,
 				EC8B916B1E1AF0970045ECD0 /* Emote.swift in Sources */,
 				EC1019891DCC283F00215E78 /* ChatViewController.swift in Sources */,
-				EC10934C1E20AFE20016858A /* FollowingTableViewController.swift in Sources */,
-				EC8967431DDC2D8300754832 /* ChannelsTableViewController.swift in Sources */,
 				EC3E49B41DD04417003509DD /* Message.swift in Sources */,
 				EC1093651E2970F40016858A /* SwipeInteractionController.swift in Sources */,
 				EC10934E1E20BD1F0016858A /* TwitchAPIManager.swift in Sources */,
 				EC1019871DCC283F00215E78 /* AppDelegate.swift in Sources */,
 				ECB943691DCE8C1B0002E560 /* ytcpsocket.swift in Sources */,
+				EC4BB4611E2F14000033AF91 /* FollowingViewController.swift in Sources */,
 				EC1093571E20E6AE0016858A /* LoginViewController.swift in Sources */,
 				EC10933D1E1ED6450016858A /* ChannelTableViewCell.swift in Sources */,
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
@@ -443,6 +442,7 @@
 				EC8B91631E07A9370045ECD0 /* MessageController.swift in Sources */,
 				EC1093681E29AFCD0016858A /* Trie.swift in Sources */,
 				EC1093361E1E3E7A0016858A /* LoadingIndicatorView.swift in Sources */,
+				EC4BB45F1E2EB2C00033AF91 /* ChannelsViewController.swift in Sources */,
 				EC8B91611DFD10CB0045ECD0 /* TwitchChatClient.swift in Sources */,
 				EC10935D1E28BC6D0016858A /* SlideLeftAnimationController.swift in Sources */,
 				EC8B91651E19CCCC0045ECD0 /* BadgeController.swift in Sources */,

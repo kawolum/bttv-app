@@ -7,7 +7,7 @@
 //
 
 struct Trie<Element> {
-    let root = TrieNode<Element>();
+    let root = TrieNode<Element>()
 
     func insert(key: String, value: Element){
         var current = root

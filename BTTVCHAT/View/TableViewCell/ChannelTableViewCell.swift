@@ -26,15 +26,6 @@ class ChannelTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        label1.layer.shadowOffset = CGSize(width: 0, height: 0)
-        label1.layer.shadowOpacity = 1
-        label1.layer.shadowRadius = 10
-        label2.layer.shadowOffset = CGSize(width: 0, height: 0)
-        label2.layer.shadowOpacity = 1
-        label2.layer.shadowRadius = 10
-        label3.layer.shadowOffset = CGSize(width: 0, height: 0)
-        label3.layer.shadowOpacity = 1
-        label3.layer.shadowRadius = 10
         setAspectConstraint()
     }
     

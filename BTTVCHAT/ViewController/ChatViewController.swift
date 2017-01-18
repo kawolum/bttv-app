@@ -14,7 +14,7 @@
 import UIKit
 import Foundation
 
-class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate{
+class ChatViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate {
     @IBOutlet weak var mainStackView: UIStackView!
     @IBOutlet weak var messageTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!

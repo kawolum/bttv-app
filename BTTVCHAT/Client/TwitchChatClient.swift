@@ -41,7 +41,8 @@ class TwitchChatClient: NSObject {
     
     func stop(){
         on = false
-        self.client.close()
+        client.send(str: "PART #\(channel!.name)\r\n")
+        client.close()
     }
     
     func authenticate(){
@@ -56,9 +57,11 @@ class TwitchChatClient: NSObject {
     
     func joinChannel(){
         if channel != nil{
-            client.send(str: "CAP REQ :twitch.tv/tags\r\n")
             client.send(str: "JOIN #\(channel!.name)\r\n")
-            //client.send(str: "JOIN #kawolum822\r\n")
+            client.send(str: "CAP REQ :twitch.tv/tags\r\n")
+            client.send(str: "CAP REQ :twitch.tv/commands\r\n")
+            client.send(str: "CAP REQ :twitch.tv/membership\r\n")
+            //@badges=broadcaster/1,premium/1;color=#FF69B4;display-name=kawolum822;emote-sets=0,18193,19194;mod=0;subscriber=0;user-type= :tmi.twitch.tv USERSTATE #kawolum822
         }else{
             print("channel is nil")
         }
