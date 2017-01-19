@@ -30,6 +30,7 @@
 		EC4BB45D1E2E1B7F0033AF91 /* DisplayNameColorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB45C1E2E1B7F0033AF91 /* DisplayNameColorCache.swift */; };
 		EC4BB45F1E2EB2C00033AF91 /* ChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB45E1E2EB2C00033AF91 /* ChannelsViewController.swift */; };
 		EC4BB4611E2F14000033AF91 /* FollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB4601E2F14000033AF91 /* FollowingViewController.swift */; };
+		EC4BB4631E2FE2B10033AF91 /* NumberFormatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4BB4621E2FE2B10033AF91 /* NumberFormatController.swift */; };
 		EC89673D1DD900B200754832 /* MessageEmote.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673C1DD900B200754832 /* MessageEmote.swift */; };
 		EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC89673E1DDC180A00754832 /* NSRangeExtension.swift */; };
 		EC8967451DDC2EC900754832 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8967441DDC2EC900754832 /* Channel.swift */; };
@@ -75,6 +76,7 @@
 		EC4BB45C1E2E1B7F0033AF91 /* DisplayNameColorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DisplayNameColorCache.swift; path = Cache/DisplayNameColorCache.swift; sourceTree = "<group>"; };
 		EC4BB45E1E2EB2C00033AF91 /* ChannelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsViewController.swift; path = ViewController/ChannelsViewController.swift; sourceTree = "<group>"; };
 		EC4BB4601E2F14000033AF91 /* FollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FollowingViewController.swift; path = ViewController/FollowingViewController.swift; sourceTree = "<group>"; };
+		EC4BB4621E2FE2B10033AF91 /* NumberFormatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NumberFormatController.swift; path = Controller/NumberFormatController.swift; sourceTree = "<group>"; };
 		EC89673C1DD900B200754832 /* MessageEmote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageEmote.swift; path = Object/MessageEmote.swift; sourceTree = "<group>"; };
 		EC89673E1DDC180A00754832 /* NSRangeExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSRangeExtension.swift; path = Extension/NSRangeExtension.swift; sourceTree = "<group>"; };
 		EC8967441DDC2EC900754832 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Channel.swift; path = Object/Channel.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				EC8B91681E1AEE700045ECD0 /* EmoteController.swift */,
 				EC8B91641E19CCCC0045ECD0 /* BadgeController.swift */,
 				EC10934D1E20BD1F0016858A /* TwitchAPIManager.swift */,
+				EC4BB4621E2FE2B10033AF91 /* NumberFormatController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -436,6 +439,7 @@
 				EC10933D1E1ED6450016858A /* ChannelTableViewCell.swift in Sources */,
 				EC326DDF1DD404B9006EB9E6 /* ytcpsocket.c in Sources */,
 				EC1093621E296B2B0016858A /* SlideRightAnimationController.swift in Sources */,
+				EC4BB4631E2FE2B10033AF91 /* NumberFormatController.swift in Sources */,
 				EC8B916F1E1B03190045ECD0 /* ImageCache.swift in Sources */,
 				EC89673D1DD900B200754832 /* MessageEmote.swift in Sources */,
 				EC89673F1DDC180A00754832 /* NSRangeExtension.swift in Sources */,

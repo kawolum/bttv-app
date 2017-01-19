@@ -8,68 +8,76 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewBottom: NSLayoutConstraint!
+    
+    var channels = [Channel]()
+    
     let slideRightAnimationController = SlideRightAnimationController()
     let slideLeftAnimationController = SlideLeftAnimationController()
     let swipeInteractionController = SwipeInteractionController()
-    var streamsAPIURLString = "https://api.twitch.tv/kraken/search/streams?limit=100&query="
+    
+    var channelsAPIURLStringTemplate0 = "https://api.twitch.tv/kraken/search/streams?limit=50&query="
+    var channelsAPIURLStringTemplate1 = "https://api.twitch.tv/kraken/search/streams?limit=75&query="
+    var query: String?
+    var offsetAPIURLString = "&offset="
+    
+    var offset = 0
+    let offsetInc = 50
+    let overlap = 25
+    var loadingChannels = false
+    var got0 = false
+    
     let headerAcceptKey = "Accept"
     let headerAcceptValue = "application/vnd.twitchtv.v5+json"
     let headerClientIDKey = "Client-ID"
     let headerClientIDValue = "3jrodo343bfqtrfs2y0nnxfnn0557j0"
     
     var selectedIndex = 0;
+    var channelNames = Set<String>()
     
-    var channels = [Channel]()
+    var cellImageViewWidth: Int?
+    var cellImageViewHeight: Int?
+    
+    let strokeTextAttributes = [NSForegroundColorAttributeName : UIColor.white, NSStrokeColorAttributeName : UIColor.black, NSStrokeWidthAttributeName : -1] as [String : Any]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
         tableView.dataSource = self
+        tableView.delegate = self
         searchBar.delegate = self
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 44
+        
+        let imageWidthCGfloat = tableView.frame.size.width - 20
+        let imageHeightCGfloat = imageWidthCGfloat * 9 / 16
+        
+        cellImageViewWidth = Int(ceil(imageWidthCGfloat))
+        cellImageViewHeight = Int(ceil(imageHeightCGfloat))
+        
+        tableView.rowHeight = ceil(imageHeightCGfloat + 10)
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return channels.count
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if (searchBar.text?.characters.count)! > 0 {
-            searchBar.endEditing(true)
-            streamsAPIURLString = "https://api.twitch.tv/kraken/search/streams?limit=100&query=\(searchBar.text!)"
-            channels.removeAll()
-            getStreams(){
-                DispatchQueue.main.async{
-                    self.tableView.reloadData()
-                }
-                self.downloadImages()
+    func getChannels(completion: @escaping (Int) -> Void){
+        var getCount = 0
+        if !loadingChannels {
+            loadingChannels = true
+            let channelsAPIURLString: String
+            if offset == 0 {
+                channelsAPIURLString = "\(channelsAPIURLStringTemplate0)\(query!)\(offsetAPIURLString)0"
+                offset += overlap
+            }else{
+                channelsAPIURLString = "\(channelsAPIURLStringTemplate1)\(query!)\(offsetAPIURLString)\(offset)"
+                offset += offsetInc
             }
-        }
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-    }
-    
-    func getStreams(completion: @escaping () -> Void){
-        DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass).async {
             
-            if let streamsAPIURL = URL(string: self.streamsAPIURLString) {
-                
+            print(channelsAPIURLString)
+            
+            if let streamsAPIURL = URL(string: channelsAPIURLString) {
                 var request = URLRequest(url: streamsAPIURL )
                 request.httpMethod = "GET"
                 request.addValue(self.headerAcceptValue, forHTTPHeaderField: self.headerAcceptKey)
                 request.addValue(self.headerClientIDValue, forHTTPHeaderField: self.headerClientIDKey)
-                request.addValue(TwitchAPIManager.sharedInstance.authorizationValue+TwitchAPIManager.sharedInstance.oAuthToken!, forHTTPHeaderField: TwitchAPIManager.sharedInstance.authorizationHeader)
                 
                 let session = URLSession.shared
                 
@@ -78,14 +86,22 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if let httpResponse = response as? HTTPURLResponse , httpResponse.statusCode == 200 {
                             do {
                                 let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                                
                                 if let dictionary = json as? [String: Any], let streams = dictionary["streams"] as? [[String: Any]]{
+                                    if streams.count == 0 || streams.count < self.offsetInc{
+                                        self.got0 = true
+                                    }
+                                    
                                     for stream in streams{
                                         if let previews = stream["preview"] as? [String: String], let preview = previews["large"], let viewers = stream["viewers"] as? Int, let game = stream["game"] as? String, let channel = stream["channel"] as? [String: Any],let id = channel["_id"] as? Int, let name = channel["name"] as? String,let status = channel["status"] as? String{
-                                            self.channels.append(Channel(id: id, viewers: viewers, status: status, game: game, name: name, previewURL: preview))
+                                            if !self.channelNames.contains(name){
+                                                self.channels.append(Channel(id: id, viewers: viewers, status: status, game: game, name: name, previewURL: preview))
+                                                self.channelNames.insert(name)
+                                                getCount += 1
+                                            }
                                         }
                                     }
                                 }
-                                
                             } catch let error as NSError {
                                 print("Failed to load: \(error.localizedDescription)")
                             }
@@ -94,28 +110,38 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     }else{
                         print("getStreams: \(err?.localizedDescription)")
                     }
-                    completion()
-                }.resume()
+                    completion(getCount)
+                    self.loadingChannels = false
+                    }.resume()
+            }else{
+                completion(getCount)
+                self.loadingChannels = false
             }
+        }else{
+            completion(getCount)
         }
     }
     
-    func downloadImages(){
-        for i in 0..<channels.count{
+    func downloadImages(count: Int){
+        for i in channels.count - count..<channels.count{
             downloadImage(index: i)
         }
     }
     
     func downloadImage(index: Int){
-        if let url = URL(string: channels[index].previewURL){
+        let previewURL = channels[index].previewURL
+        
+        if let url = URL(string: previewURL){
             let session = URLSession.shared
             session.dataTask(with: url){ data, response, err in
                 if err == nil{
                     if let newData = data, let newImage = UIImage(data: newData){
                         self.channels[index].previewImage = newImage
-                        DispatchQueue.main.async{
-                            let indexPath = IndexPath(item: index, section: 0)
-                            self.tableView.reloadRows(at: [indexPath], with: .none)
+                        let indexPath = IndexPath(row: index, section: 0)
+                        if let indexPaths = self.tableView.indexPathsForVisibleRows, indexPaths.contains(indexPath) {
+                            DispatchQueue.main.async{
+                                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                            }
                         }
                     }
                 }else{
@@ -124,30 +150,6 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }.resume()
         }
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "channelCell", for: indexPath) as! ChannelTableViewCell
-        
-        let index = indexPath.row
-        
-        cell.label1.text = "\(channels[index].name)"
-        cell.label2.text = "\(channels[index].status)"
-        cell.label3.text = "streaming \(channels[index].game) for \(channels[index].viewers) viewers"
-        
-        if let image = channels[index].previewImage{
-            cell.setPostedImage(image: image)
-        }
-        
-        return cell
-    }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndex = indexPath.row
-        
-        self.performSegue(withIdentifier: "toChat", sender: self)
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toChat"{
             if let destinationViewController = segue.destination as? ChatViewController{
@@ -157,7 +159,95 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
     }
+}
+
+extension SearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if (searchBar.text?.characters.count)! > 0 {
+            searchBar.endEditing(true)
+            
+            query = searchBar.text!
+            channels.removeAll()
+            offset = 0
+            channelNames.removeAll()
+            
+            getChannels(){ getCount in
+                if getCount > 0 {
+                    print(getCount)
+                    print(self.channels.count)
+                    DispatchQueue.main.async{
+                        self.tableView.reloadData()
+                    }
+                    self.downloadImages(count: getCount)
+                }
+            }
+        }
+    }
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print("beginediting")
+        searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("cancelbutton clicked")
+        searchBar.endEditing(true)
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+    }
+}
+
+extension SearchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //        selectedIndex = indexPath.row;
+        //        self.performSegue(withIdentifier: "toChat", sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let index = indexPath.row
+        if index + 25 >= channels.count && !loadingChannels && !got0 {
+            getChannels(){ getCount in
+                if getCount > 0 {
+                    var indexPaths = [IndexPath]()
+                    for i in self.channels.count - getCount..<self.channels.count{
+                        indexPaths.append(IndexPath(row: i, section: 0))
+                    }
+                    DispatchQueue.main.async{
+                        self.tableView.insertRows(at: indexPaths, with: UITableViewRowAnimation.none)
+                    }
+                    self.downloadImages(count: getCount)
+                }
+            }
+        }
+    }
+}
+
+extension SearchViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return channels.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "channelCell", for: indexPath) as! ChannelTableViewCell
+        
+        let index = indexPath.row
+        
+        cell.label1.attributedText = NSAttributedString(string: "\(channels[index].name)", attributes: strokeTextAttributes)
+        cell.label2.attributedText = NSAttributedString(string: "\(channels[index].status)", attributes: strokeTextAttributes)
+        cell.label3.attributedText = NSAttributedString(string: "\(channels[index].game) for \(NumberFormatController.commaFormattedNumber(number: channels[index].viewers)) viewers", attributes: strokeTextAttributes)
+        
+        if let image = channels[index].previewImage{
+            cell.previewImage.image = image
+        }
+        
+        return cell
+    }
 }
 
 extension SearchViewController: UIViewControllerTransitioningDelegate {
